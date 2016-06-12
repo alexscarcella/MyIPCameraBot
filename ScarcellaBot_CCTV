@@ -1,0 +1,49 @@
+import sys
+import logging
+import telepot
+from datetime import datetime
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+from pprint import pprint
+
+class MyHandler(FileSystemEventHandler):
+    # def on_any_event(self, event):
+        # print "Evento: " + event.event_type
+    def on_created(self, event):
+        print "Nuovo file: " + event.src_path
+        # bot.sendMessage(114006616, 'Nuovo file: ' + event.src_path)
+        f = open(event.src_path, 'rb')
+        bot.sendPhoto(999999999, f)
+
+if __name__ == "__main__":
+    # ------ TELEGRAM --------------
+    # imposto il telegram Bot
+    bot=telepot.Bot('asdasdasdasdasdasdasdasdasd')
+    # scambio qualche messaggio all'avvio:
+    utente = bot.getMe()
+    print(utente)
+    bot.sendMessage(999999999, 'Mi sono avviato adesso! - ' + str(datetime.now()))
+    # definisco il gestore che deve essere invocato nel loop del bot
+    def handle(msg):
+        pprint(msg)
+    # avvio il loop del bot che resta in ascolto dei messaggi
+    # verso il BPT (passando il mio gestore)
+    bot.message_loop(handle)
+    
+    # ------ WATCHDOG --------------
+    # watchdog folder
+    path = sys.argv[1] if len(sys.argv) > 1 else '.'
+    event_handler = MyHandler()
+    observer = Observer()
+    observer.schedule(event_handler, path, recursive=False)
+    observer.start()
+
+    # tengo in vita il processo fino a che
+    # qualcuno non lo interrompe da tastiera
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
