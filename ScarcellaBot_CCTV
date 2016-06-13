@@ -1,9 +1,9 @@
 #!/usr/bin/env python2.7
 import sys
-import logging
 import telepot
-from datetime import datetime
 import time
+import config
+from datetime import datetime
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from pprint import pprint
@@ -13,18 +13,19 @@ class MyHandler(FileSystemEventHandler):
         # print "Evento: " + event.event_type
     def on_created(self, event):
         print "Nuovo file: " + event.src_path
-        # bot.sendMessage(999999999, 'Nuovo file: ' + event.src_path)
+        # bot.sendMessage(config.TELEGRAM_USERS_ID, 'Nuovo file: ' + event.src_path)
         f = open(event.src_path, 'rb')
-        bot.sendPhoto(999999999, f)
+        bot.sendPhoto(config.TELEGRAM_USERS_ID, f)
 
 if __name__ == "__main__":
+    print
     # ------ TELEGRAM --------------
     # imposto il telegram Bot
-    bot=telepot.Bot('asdasdasdasdasdasdasdasdasd')
+    bot=telepot.Bot(config.TELEGRAM_BOT_TOKEN)
     # scambio qualche messaggio all'avvio:
     utente = bot.getMe()
     print(utente)
-    bot.sendMessage(999999999, 'Mi sono avviato adesso! - ' + str(datetime.now()))
+    bot.sendMessage(config.TELEGRAM_USERS_ID, 'Mi sono avviato adesso! - ' + str(datetime.now()))
     # definisco il gestore che deve essere invocato nel loop del bot
     def handle(msg):
         pprint(msg)
