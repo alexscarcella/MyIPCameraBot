@@ -7,14 +7,14 @@ Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).
 
 E' necessario creare il file di configurazione 
 
-ScarcellaBot_config.py
+`ScarcellaBot_config.py`
 
 Con il seguente testo:
 
-## fil#!/usr/bin/env python2.7
+`## fil#!/usr/bin/env python2.7
 ##
 # inserite qui il Token segreto del BOT Telegram
 TELEGRAM_BOT_TOKEN="fffffffffffffffffffffffffffffffffff"
 
 # inserite qui l'ID dell'utente Telegram a cui volete spedire le immagini
-TELEGRAM_USER_ID="0000000" 
+TELEGRAM_USER_ID="0000000" `
