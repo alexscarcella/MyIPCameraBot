@@ -11,10 +11,12 @@ E' necessario creare il file di configurazione
 
 Con il seguente testo:
 
-`## fil#!/usr/bin/env python2.7'
-'##'
-'# inserite qui il Token segreto del BOT Telegram'
-'TELEGRAM_BOT_TOKEN="fffffffffffffffffffffffffffffffffff"'
-''
-'# inserite qui l'ID dell'utente Telegram a cui volete spedire le immagini'
-'TELEGRAM_USER_ID="0000000" `
+```
+## fil#!/usr/bin/env python2.7
+##
+# inserite qui il Token segreto del BOT Telegram
+TELEGRAM_BOT_TOKEN="fffffffffffffffffffffffffffffffffff"
+
+# inserite qui l'ID dell'utente Telegram a cui volete spedire le immagini
+TELEGRAM_USER_ID="0000000"
+```
