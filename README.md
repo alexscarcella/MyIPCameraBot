@@ -1,6 +1,8 @@
 # ScarcellaBot_CCTV
 
-[provvisorio] Si tratta del gestore di un **BOT di Telegram** che preleva immagini da una cartella sul file system locale (ad esempio le immagini prodotte da un sistema di videosorveglianza, magari scaricate via FTP) e le invia ad uno o più account Telegram.
+Si tratta di un gestore base per un **BOT di Telegram** che preleva immagini da una cartella sul file system locale (ad esempio le immagini prodotte da un sistema di videosorveglianza, magari scaricate via FTP) e le invia ad uno o più account Telegram.
+Le immagini vengono spedite in chat man mano che vengono create sul file system: il modulo `whatchdog` sta infatti in ascolto su una cartella locale. Mentre il modulo `telepot` si occupa di gestire il BOT ed i messaggi.
+
 _Lo script è in fase di redazione_
 
 Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).
