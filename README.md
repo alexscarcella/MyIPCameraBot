@@ -7,6 +7,8 @@ _Lo script è in fase di redazione_
 
 Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).
 
+
+## ScarcellaBot_config.py
 E' necessario creare il file di configurazione `ScarcellaBot_config.py` da mettere nella stessa cartella dello script python.
 Il file definisce i valori di due parametri che è meglio tenere segreti:
 - `TELEGRAM_BOT_TOKEN`: il token segreto del Bot di telegram
