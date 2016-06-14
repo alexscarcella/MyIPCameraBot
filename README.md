@@ -5,9 +5,7 @@ _Lo script è in fase di redazione_
 
 Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).
 
-E' necessario creare il file di configurazione 
-
-`ScarcellaBot_config.py`
+E' necessario creare il file di configurazione `ScarcellaBot_config.py` da mettere nella stessa cartella dello script python.
 
 Con il seguente testo:
 
