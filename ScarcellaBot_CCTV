@@ -2,7 +2,7 @@
 import sys
 import telepot
 import time
-import config
+import ScarcellaBot_config
 from datetime import datetime
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -13,15 +13,15 @@ class MyHandler(FileSystemEventHandler):
         # print "Evento: " + event.event_type
     def on_created(self, event):
         print "Nuovo file: " + event.src_path
-        # bot.sendMessage(config.TELEGRAM_USERS_ID, 'Nuovo file: ' + event.src_path)
+        # bot.sendMessage(ScarcellaBot_config.TELEGRAM_USERS_ID, 'Nuovo file: ' + event.src_path)
         f = open(event.src_path, 'rb')
-        bot.sendPhoto(config.TELEGRAM_USERS_ID, f)
+        bot.sendPhoto(ScarcellaBot_config.TELEGRAM_USERS_ID, f)
 
 if __name__ == "__main__":
     print
     # ------ TELEGRAM --------------
     # imposto il telegram Bot
-    bot=telepot.Bot(config.TELEGRAM_BOT_TOKEN)
+    bot=telepot.Bot(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
     # scambio qualche messaggio all'avvio:
     utente = bot.getMe()
     print(utente)
