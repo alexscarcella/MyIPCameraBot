@@ -1,3 +1,6 @@
+# ScarcellaBot_CCTV custom ignore file list
+config.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -88,5 +91,9 @@ ENV/
 # Rope project settings
 .ropeproject
 
-# ScarcellaBot_CCTV custom ignore file list
-config.py
+
+
+.idea/ScarcellaBot_CCTV.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/workspace.xml
