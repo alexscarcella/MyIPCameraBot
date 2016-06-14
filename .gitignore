@@ -1,5 +1,5 @@
 # ScarcellaBot_CCTV custom ignore file list
-config.py
+**config.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
