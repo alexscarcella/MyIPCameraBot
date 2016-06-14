@@ -13,9 +13,9 @@ class MyHandler(FileSystemEventHandler):
         # print "Evento: " + event.event_type
     def on_created(self, event):
         print "Nuovo file: " + event.src_path
-        # bot.sendMessage(ScarcellaBot_config.TELEGRAM_USERS_ID, 'Nuovo file: ' + event.src_path)
+        # bot.sendMessage(ScarcellaBot_config.TELEGRAM_USER_ID, 'Nuovo file: ' + event.src_path)
         f = open(event.src_path, 'rb')
-        bot.sendPhoto(ScarcellaBot_config.TELEGRAM_USERS_ID, f)
+        bot.sendPhoto(ScarcellaBot_config.TELEGRAM_USER_ID, f)
 
 if __name__ == "__main__":
     print
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     # scambio qualche messaggio all'avvio:
     utente = bot.getMe()
     print(utente)
-    bot.sendMessage(config.TELEGRAM_USERS_ID, 'Mi sono avviato adesso! - ' + str(datetime.now()))
+    bot.sendMessage(ScarcellaBot_config.TELEGRAM_USER_ID, 'Mi sono avviato adesso! - ' + str(datetime.now()))
     # definisco il gestore che deve essere invocato nel loop del bot
     def handle(msg):
         pprint(msg)
