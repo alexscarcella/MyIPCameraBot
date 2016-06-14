@@ -12,7 +12,7 @@ E' necessario creare il file di configurazione `ScarcellaBot_config.py` da mette
 Il file definisce i valori di due parametri che è meglio tenere segreti:
 - `TELEGRAM_BOT_TOKEN`: il token segreto del Bot di telegram
 - `TELEGRAM_USER_ID`: l'ID dell'utente a cui volete spedire le immagini
-
+- `IMAGES_PATH`: il path completo della cartella contenente le immagini
 Ad esempio:
 
 ```
@@ -23,6 +23,9 @@ TELEGRAM_BOT_TOKEN="fffffffffffffffffffffffffffffffffff"
 
 # inserite qui l'ID dell'utente Telegram a cui volete spedire le immagini
 TELEGRAM_USER_ID="0000000"
+
+# path completo della cartella contenente le immagini
+IMAGES_PATH="."
 ```
 
 Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).

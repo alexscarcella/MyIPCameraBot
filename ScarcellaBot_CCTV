@@ -37,7 +37,7 @@ if __name__ == "__main__":
     
     # ------ WATCHDOG --------------
     # watchdog folder
-    path = sys.argv[1] if len(sys.argv) > 1 else '.'
+    path = ScarcellaBot_config.IMAGES_PATH if ScarcellaBot_config.IMAGES_PATH > 1 else '.'
     event_handler = MyHandler()
     observer = Observer()
     observer.schedule(event_handler, path, recursive=False)
