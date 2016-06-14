@@ -28,7 +28,7 @@ if __name__ == "__main__":
     except:
         print "Impossibile inizializzare il BOT", sys.exc_info()[0]
     for u in ScarcellaBot_config.TELEGRAM_USERS_ID:
-        print u
+        print u # stampo il destinatario
         bot.sendMessage(ScarcellaBot_config.TELEGRAM_USERS_ID, 'Mi sono avviato adesso! - ' + str(datetime.now()))
     # definisco il gestore che deve essere invocato nel loop del bot
     def handle(msg):
