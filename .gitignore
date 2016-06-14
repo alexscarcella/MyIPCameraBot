@@ -88,4 +88,5 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# ScarcellaBot_CCTV custom ignore file list
 config.py
