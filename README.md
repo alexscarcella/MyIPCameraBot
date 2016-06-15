@@ -7,10 +7,10 @@ Le immagini vengono spedite in chat man mano che vengono create sul file system:
 ## ScarcellaBot_config.py
 
 E' necessario creare il file di configurazione `ScarcellaBot_config.py` da mettere nella stessa cartella dello script python.
-Il file definisce i valori di due parametri che è meglio tenere segreti:
+Il file definisce i valori di alcuni parametri che è meglio tenere segreti:
 - `TELEGRAM_BOT_TOKEN`: il token segreto del Bot di telegram
 - `TELEGRAM_USERS_ID`: la lista degli ID dell'utente a cui volete spedire le immagini
-- `IMAGES_PATH`: il path completo della cartella contenente le immagini
+- `IMAGES_PATH`: il path completo della cartella contenente le immagini che si vogliono spedire via bot
 Ad esempio:
 
 ```
