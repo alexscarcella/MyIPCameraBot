@@ -6,34 +6,39 @@ nel quale definire le seguenti variabili
 TELEGRAM_BOT_TOKEN
 TELEGRAM_USERS_ID
 IMAGES_PATH
-
 """
 import ScarcellaBot_config
-import sys, time, os, telepot
+import sys
+import time
+import os
+import telepot
 from datetime import datetime
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from pprint import pprint
 
+
 class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
         print "Nuovo file: " + event.src_path
         if os.path.splitext(event.src_path)[1] == ".jpg":
-            for u in ScarcellaBot_config.TELEGRAM_USERS_ID:
+            for user in ScarcellaBot_config.TELEGRAM_USERS_ID:
                 try:
                     f = open(event.src_path, 'rb')
-                    print 'Invio il messaggio a: ' + u
-                    bot.sendPhoto(u, f)
+                    print 'Invio il messaggio a: ' + user
+                    bot.sendPhoto(user, f)
                 except:
-                    print "Impossibile inviare l'immagine %s a %s" % (sys.exc_info()[0], u)
+                    print "Impossibile inviare l'immagine %s a %s" % (sys.exc_info()[0], user)
                 finally:
                     f.close()
+
 
 if __name__ == "__main__":
     # ------ TELEGRAM --------------
     # imposto il telegram Bot
+    bot = None
     try:
-        bot=telepot.Bot(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
+        bot = telepot.Bot(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
         utente = bot.getMe()
         # scambio qualche messaggio all'avvio:
         print(utente)
@@ -42,13 +47,16 @@ if __name__ == "__main__":
     for u in ScarcellaBot_config.TELEGRAM_USERS_ID:
         print 'Invio il messaggio a: ' + u
         bot.sendMessage(u, 'Mi sono avviato adesso! - ' + str(datetime.now()))
+
+
     # definisco il gestore che deve essere invocato nel loop del bot
     def handle(msg):
         pprint(msg)
     # avvio il loop del bot che resta in ascolto dei messaggi
     # verso il BPT (passando il mio gestore)
     bot.message_loop(handle)
-    
+
+
     # ------ WATCHDOG --------------
     # watchdog folder
     path = ScarcellaBot_config.IMAGES_PATH if ScarcellaBot_config.IMAGES_PATH > 1 else '.'
@@ -57,6 +65,7 @@ if __name__ == "__main__":
     observer.schedule(event_handler, path, recursive=False)
     observer.start()
 
+
     # tengo in vita il processo fino a che
     # qualcuno non lo interrompe da tastiera
     try:
@@ -64,4 +73,5 @@ if __name__ == "__main__":
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
+        bot.sendMessage(u, 'Stop!! - ')
     observer.join()
