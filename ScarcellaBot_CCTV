@@ -19,13 +19,15 @@ class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
         print "Nuovo file: " + event.src_path
         if os.path.splitext(event.src_path)[1] == ".jpg":
-            try:
-                f = open(event.src_path, 'rb')
-                for u in ScarcellaBot_config.TELEGRAM_USERS_ID:
+            for u in ScarcellaBot_config.TELEGRAM_USERS_ID:
+                try:
+                    f = open(event.src_path, 'rb')
                     print 'Invio il messaggio a: ' + u
                     bot.sendPhoto(u, f)
-            except:
-                print "Impossibile inviare l'immagine %s a %s" % (sys.exc_info()[0], u)
+                except:
+                    print "Impossibile inviare l'immagine %s a %s" % (sys.exc_info()[0], u)
+                finally:
+                    f.close()
 
 if __name__ == "__main__":
     # ------ TELEGRAM --------------
