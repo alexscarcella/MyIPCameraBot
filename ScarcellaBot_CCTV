@@ -1,4 +1,13 @@
 #!/usr/bin/env python2.7
+"""
+creare un file di configurazione ScarcellaBot_config
+nel quale definire le seguenti variabili
+
+TELEGRAM_BOT_TOKEN
+TELEGRAM_USER_ID
+IMAGES_PATH
+TELEGRAM_USERS_ID
+"""
 import sys
 import telepot
 import time
