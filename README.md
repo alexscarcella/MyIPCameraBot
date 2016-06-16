@@ -42,6 +42,7 @@ Per far funzionare correttamente lo script è necessario installare alcuni modul
 Potete installare i moduli usando [pip](https://pypi.python.org/pypi/pip).
 
 `$ sudo pip install watchdog`
+
 `$ sudo pip install telepot`
 
 Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).
