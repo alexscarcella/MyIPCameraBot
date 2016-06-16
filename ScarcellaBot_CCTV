@@ -37,6 +37,7 @@ if __name__ == "__main__":
     # ------ TELEGRAM --------------
     # imposto il telegram Bot
     bot = None
+    lastMessage = None  # datetime dell'ultimo messaggio inviato
     try:
         bot = telepot.Bot(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
         utente = bot.getMe()
