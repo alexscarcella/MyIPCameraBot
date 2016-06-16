@@ -16,28 +16,32 @@ from datetime import datetime
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from pprint import pprint
+from datetime import datetime
 
 
 class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
         print "Nuovo file: " + event.src_path
-        if os.path.splitext(event.src_path)[1] == ".jpg":
+        global lastMessage
+        if os.path.splitext(event.src_path)[1] == ".jpg" and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS:
             for user in ScarcellaBot_config.TELEGRAM_USERS_ID:
                 try:
                     f = open(event.src_path, 'rb')
                     print 'Invio il messaggio a: ' + user
                     bot.sendPhoto(user, f)
+                    lastMessage = datetime.now()
                 except:
                     print "Impossibile inviare l'immagine %s a %s" % (sys.exc_info()[0], user)
                 finally:
                     f.close()
+        else:
+            print "Non invio il messaggio. Devono passare almeno %s secondi dall'ultimo invio" % ScarcellaBot_config.SEND_SECONDS
 
 
 if __name__ == "__main__":
+    lastMessage = datetime.now()  # datetime dell'ultimo messaggio inviato
     # ------ TELEGRAM --------------
-    # imposto il telegram Bot
-    bot = None
-    lastMessage = None  # datetime dell'ultimo messaggio inviato
+    bot = None  # imposto il telegram Bot
     try:
         bot = telepot.Bot(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
         utente = bot.getMe()

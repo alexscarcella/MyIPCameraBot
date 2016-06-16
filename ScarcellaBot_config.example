@@ -8,3 +8,6 @@ TELEGRAM_USERS_ID = ["0000000000", "11111111111"]
 
 # path completo della cartella contenente le immagini (un esempio:)
 IMAGES_PATH = "/Volumes/dati/cctv"
+
+# l'intervallo di tempo minimo (in secondi) che deve trascorrere da un messagio ed il successivo
+SEND_SECONDS = 8
