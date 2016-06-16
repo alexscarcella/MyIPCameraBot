@@ -5,6 +5,10 @@ Le immagini vengono spedite in chat man mano che vengono create sul file system:
 
 Personalmente uso questo semplice script con il sistema di videosorveglianza casalingo: ogni camera IP è in grado di inviare snapshot _.jpg_ su un server FTP o su una cartella condivisa nella rete locale. In questo modo è possibile farsi spedire le immagini di una camera, magari acquisita a valle di un movimento o di un romore, direttamente su una chat dedicata su Telegram.
 
+TODO:
+con il tempo mi piacerebbe implementare dei comandi per spegnere ed accendere le camere, inviarmi immagini o spezzoni video a richiesta o cambiare alcuni parametri di funzionamento.
+
+
 ## ScarcellaBot_config.py
 
 E' necessario creare il file di configurazione `ScarcellaBot_config.py` da mettere nella stessa cartella dello script python.
@@ -27,7 +31,16 @@ TELEGRAM_USERS_ID = ["0000000000", "11111111111"]
 IMAGES_PATH = "/Volumes/dati/cctv"
 ```
 
-TODO:
-con il tempo mi piacerebbe implementare dei comandi per spegnere ed accendere le camere, inviarmi immagini o spezzoni video a richiesta o cambiare alcuni parametri di funzionamento.
+
+## Dipendenze
+
+Per far funzionare correttamente lo script è necessario installare alcuni moduli Python aggiuntivi:
+- [telepot](https://github.com/nickoala/telepot): Python framework for Telegram Bot API
+- [watchdog](https://pypi.python.org/pypi/watchdog): Filesystem events monitoring. Python API and shell utilities to monitor file system events.
+
+Potete installare i moduli usando [pip](https://pypi.python.org/pypi/pip).
+
+`$ sudo pip install watchdog`
+`$ sudo pip install telepot`
 
 Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).
