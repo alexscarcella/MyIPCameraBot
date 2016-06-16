@@ -35,6 +35,7 @@ class MyHandler(FileSystemEventHandler):
                 finally:
                     f.close()
         else:
+            # TODO mattere il tempo mancante dall'ultimo invio. Oppure mettere il datetime dell'ultimo invio.
             print "Non invio il messaggio. Devono passare almeno %s secondi dall'ultimo invio" % ScarcellaBot_config.SEND_SECONDS
 
 
