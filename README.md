@@ -35,7 +35,7 @@ E' possibile usare come modello il file `ScarcellaBot_config.example` (da editar
 
 ## Dipendenze
 
-Per far funzionare correttamente lo script è necessario installare alcuni moduli Python aggiuntivi:
+Per far funzionare correttamente lo script del [bot](https://core.telegram.org/bots) è necessario installare alcuni moduli Python aggiuntivi:
 - [telepot](https://github.com/nickoala/telepot): Python framework for Telegram Bot API
 - [watchdog](https://pypi.python.org/pypi/watchdog): Filesystem events monitoring. Python API and shell utilities to monitor file system events.
 
