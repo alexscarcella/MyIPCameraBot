@@ -1,0 +1,10 @@
+# fil#!/usr/bin/env python2.7
+
+# inserite qui il Token segreto del BOT Telegram
+TELEGRAM_BOT_TOKEN = "fffffffffffffffffffffffffffffffffff"
+
+# inserite qui gli ID degli utenti Telegram a cui volete spedire le immagini (lista separata da virgola)
+TELEGRAM_USERS_ID = ["0000000000", "11111111111"]
+
+# path completo della cartella contenente le immagini (un esempio:)
+IMAGES_PATH = "/Volumes/dati/cctv"
