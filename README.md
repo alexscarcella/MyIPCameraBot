@@ -19,8 +19,8 @@ Il file definisce i valori di alcuni parametri (alcuni dei quali è meglio tener
 Ad esempio:
 
 ```
-## fil#!/usr/bin/env python2.7
-##
+# fil#!/usr/bin/env python2.7
+
 # inserite qui il Token segreto del BOT Telegram
 TELEGRAM_BOT_TOKEN = "fffffffffffffffffffffffffffffffffff"
 
@@ -31,6 +31,7 @@ TELEGRAM_USERS_ID = ["0000000000", "11111111111"]
 IMAGES_PATH = "/Volumes/dati/cctv"
 ```
 
+E' possibile usare come modello il file `ScarcellaBot_config.example` (da editare e rinominare).
 
 ## Dipendenze
 
