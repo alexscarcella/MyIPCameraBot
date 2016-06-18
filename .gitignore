@@ -99,3 +99,4 @@ ENV/
 .idea/modules.xml
 .idea/workspace.xml
 /ScarcellaBot_camere.py
+/copyToRaspberry.sh

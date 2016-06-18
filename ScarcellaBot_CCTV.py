@@ -25,9 +25,11 @@ class WatchdogHandler(FileSystemEventHandler):
     def on_created(self, event):
         print "New file: " + event.src_path
         global lastMessage
-        if os.path.splitext(event.src_path)[1] == ".jpg" \
-                and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS \
-                and send_ondemand is True:
+        if os.path.splitext(event.src_path)[1] != ".jpg":
+            print("Il file non e' un .jpg")
+            return None
+        if (send_ondemand is True) or \
+                (send_ondemand is False and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS):
             for user in ScarcellaBot_config.TELEGRAM_USERS_ID:
                 try:
                     f = open(event.src_path, 'rb')
@@ -92,8 +94,8 @@ if __name__ == "__main__":
     send_ondemand_timer=0
     # ------ TELEGRAM --------------
     helpMessage = 'Ecco i miei comandi:\n'\
-                    '/help: elenco comandi\n'\
-                    '/jpg: ti invio le immagini delle camere\n'
+                    '/help: elenco comandi (questo!)\n'\
+                    '/jpg: ti invio le immagini JPG delle camere\n'
     try:
         bot = ScarcellaBotCommands(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
         print("Bot:", bot.getMe())
@@ -117,7 +119,7 @@ if __name__ == "__main__":
     # tengo in vita il processo fino a che
     # qualcuno non lo interrompe da tastiera
     try:
-        while True:
+        while 1:
             if send_ondemand is True:
                 send_ondemand_timer += 1
             if send_ondemand_timer > ScarcellaBot_config.SEND_ONDEMAND_TIMOUT:
