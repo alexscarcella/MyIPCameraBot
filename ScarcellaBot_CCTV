@@ -14,6 +14,7 @@ import time
 import os
 import telepot
 import requests # TODO inserire la dipendeza nel readme
+from requests.auth import HTTPBasicAuth
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from pprint import pprint
@@ -37,7 +38,8 @@ class WatchdogHandler(FileSystemEventHandler):
                 finally:
                     f.close()
         else:
-            print("Non invio il messaggio. Devono passare almeno {0} secondi dall'ultimo invio ({1})".format(ScarcellaBot_config.SEND_SECONDS, lastMessage))
+            print("Non invio il messaggio. Devono passare almeno {0} secondi dall'ultimo invio ({1})".format(ScarcellaBot_config.SEND_SECONDS,
+                                                                                                             lastMessage))
 
 
 class ScarcellaBotCommands(telepot.Bot):
@@ -50,17 +52,26 @@ class ScarcellaBotCommands(telepot.Bot):
             content_type, chat_type, chat_id = telepot.glance(msg)
             print ("Chat message: ", content_type, chat_type, chat_id, msg['text'])
             if msg['text'] == '/help':
-                bot.sendMessage(u, helpMessage)
+                self.__Comm_help()
             elif msg['text'] == '/jpg':
-                print('ti mando le immagini')
-                url_base = 'http://' + ScarcellaBot_camere.camera01['ip'] + ":" + ScarcellaBot_camere.camera01['port']
-                url_complete = url_base + ScarcellaBot_camere.camera01['url_send_jpg_to_folder']
-                r = requests.get(url_complete, auth(ScarcellaBot_camere['user'], ScarcellaBot_camere['pwd']))
-                print r.status_code
+                self.__Comm_jpg()
             else:
                 bot.sendMessage(u, 'Non capisco...')
         else:
             raise telepot.BadFlavor(msg)
+
+
+    def __Comm_help(self):
+        bot.sendMessage(u, helpMessage)
+
+
+    def __Comm_jpg(self):
+        url_base = 'http://' + ScarcellaBot_camere.camera01['ip'] + ":" + ScarcellaBot_camere.camera01['port']
+        url_complete = url_base + ScarcellaBot_camere.camera01['url_send_jpg_to_folder']
+        r = requests.get(url_complete, auth=HTTPBasicAuth(ScarcellaBot_camere.camera01['user'],
+                                                          ScarcellaBot_camere.camera01['pwd']))
+        print r.status_code
+        print r.content
 
 
 if __name__ == "__main__":
