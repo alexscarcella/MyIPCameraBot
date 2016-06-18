@@ -62,16 +62,22 @@ class ScarcellaBotCommands(telepot.Bot):
 
 
     def __Comm_help(self):
-        bot.sendMessage(u, helpMessage)
+        try:
+            bot.sendMessage(u, helpMessage)
+        except:
+            print "Impossibile inviare il messaggio di help: ", sys.exc_info()[0]
 
 
     def __Comm_jpg(self):
-        url_base = 'http://' + ScarcellaBot_camere.camera01['ip'] + ":" + ScarcellaBot_camere.camera01['port']
-        url_complete = url_base + ScarcellaBot_camere.camera01['url_send_jpg_to_folder']
-        r = requests.get(url_complete, auth=HTTPBasicAuth(ScarcellaBot_camere.camera01['user'],
-                                                          ScarcellaBot_camere.camera01['pwd']))
-        print r.status_code
-        print r.content
+        try:
+            for camera in ScarcellaBot_camere.camere:
+                url_base = 'http://' + ScarcellaBot_camere.camera01['ip'] + ":" + ScarcellaBot_camere.camera01['port']
+                url_complete = url_base + ScarcellaBot_camere.camera01['url_send_jpg_to_folder']
+                r = requests.get(url_complete, auth=HTTPBasicAuth(ScarcellaBot_camere.camera01['user'],
+                                                                  ScarcellaBot_camere.camera01['pwd']))
+                print r.status_code
+        except:
+            print "Impossibile inviare una immagine alla cartella: ", sys.exc_info()[0]
 
 
 if __name__ == "__main__":
