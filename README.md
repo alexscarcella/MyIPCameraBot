@@ -13,10 +13,6 @@ con il tempo mi piacerebbe implementare dei comandi per spegnere ed accendere le
 
 E' necessario creare il file di configurazione `ScarcellaBot_config.py` da mettere nella stessa cartella dello script python.
 Il file definisce i valori di alcuni parametri (alcuni dei quali è meglio tenere segreti).
-- `TELEGRAM_BOT_TOKEN`: il token segreto del Bot di telegram
-- `TELEGRAM_USERS_ID`: la lista degli ID dell'utente a cui volete spedire le immagini
-- `IMAGES_PATH`: il path completo della cartella contenente le immagini che si vogliono spedire via bot
-- `SEND_SECONDS`: l'intervallo di tempo minimo (in secondi) che deve trascorrere da un messagio ed il successivo
 Ad esempio:
 
 ```
@@ -26,6 +22,7 @@ Ad esempio:
 TELEGRAM_BOT_TOKEN = "fffffffffffffffffffffffffffffffffff"
 
 # inserite qui gli ID degli utenti Telegram a cui volete spedire le immagini (lista separata da virgola)
+# Meglio tenere questi dati riservati
 TELEGRAM_USERS_ID = ["0000000000", "11111111111"]
 
 # path completo della cartella contenente le immagini (un esempio:)
@@ -33,6 +30,9 @@ IMAGES_PATH = "/Volumes/dati/cctv"
 
 # l'intervallo di tempo minimo (in secondi) che deve trascorrere da un messagio ed il successivo
 SEND_SECONDS = 60
+
+# tempo necessario all'invio delle immagini di tutte le camere prima del time-out
+SEND_ONDEMAND_TIMOUT = 18
 ```
 
 E' possibile usare come modello il file `ScarcellaBot_config.example` (da editare e rinominare).
