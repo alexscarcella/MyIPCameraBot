@@ -8,6 +8,7 @@ TELEGRAM_USERS_ID
 IMAGES_PATH
 """
 import ScarcellaBot_config
+import ScarcellaBot_camere
 import sys
 import time
 import os
@@ -49,11 +50,13 @@ class ScarcellaBotCommands(telepot.Bot):
             content_type, chat_type, chat_id = telepot.glance(msg)
             print ("Chat message: ", content_type, chat_type, chat_id, msg['text'])
             if msg['text'] == '/help':
-                bot.sendMessage(u, 'Ecco i miei comandi:\n'
-                                '/help: elenco comandi\n'
-                                '/jpg: ti invio le immagini delle camere\n')
+                bot.sendMessage(u, helpMessage)
             elif msg['text'] == '/jpg':
                 print('ti mando le immagini')
+                url_base = 'http://' + ScarcellaBot_camere.camera01['ip'] + ":" + ScarcellaBot_camere.camera01['port']
+                url_complete = url_base + ScarcellaBot_camere.camera01['url_send_jpg_to_folder']
+                r = requests.get(url_complete, auth(ScarcellaBot_camere['user'], ScarcellaBot_camere['pwd']))
+                print r.status_code
             else:
                 bot.sendMessage(u, 'Non capisco...')
         else:
@@ -63,12 +66,15 @@ class ScarcellaBotCommands(telepot.Bot):
 if __name__ == "__main__":
     lastMessage = datetime.now()  # datetime dell'ultimo messaggio inviato
     # ------ TELEGRAM --------------
+    helpMessage = 'Ecco i miei comandi:\n'\
+                    '/help: elenco comandi\n'\
+                    '/jpg: ti invio le immagini delle camere\n'
     try:
         bot = ScarcellaBotCommands(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
         print("Bot:", bot.getMe())
         for u in ScarcellaBot_config.TELEGRAM_USERS_ID:
             print('Invio il saluto a ', u)
-            bot.sendMessage(u, 'Ciao! Adesso sono attivo!')
+            bot.sendMessage(u, 'Ciao! Adesso sono attivo!\n\n' + helpMessage)
         bot.message_loop()
         print("in ascolto...")
     except:
