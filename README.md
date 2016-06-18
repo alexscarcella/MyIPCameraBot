@@ -16,6 +16,7 @@ Il file definisce i valori di alcuni parametri (alcuni dei quali è meglio tener
 - `TELEGRAM_BOT_TOKEN`: il token segreto del Bot di telegram
 - `TELEGRAM_USERS_ID`: la lista degli ID dell'utente a cui volete spedire le immagini
 - `IMAGES_PATH`: il path completo della cartella contenente le immagini che si vogliono spedire via bot
+- `SEND_SECONDS`: l'intervallo di tempo minimo (in secondi) che deve trascorrere da un messagio ed il successivo
 Ad esempio:
 
 ```
@@ -29,6 +30,9 @@ TELEGRAM_USERS_ID = ["0000000000", "11111111111"]
 
 # path completo della cartella contenente le immagini (un esempio:)
 IMAGES_PATH = "/Volumes/dati/cctv"
+
+# l'intervallo di tempo minimo (in secondi) che deve trascorrere da un messagio ed il successivo
+SEND_SECONDS = 60
 ```
 
 E' possibile usare come modello il file `ScarcellaBot_config.example` (da editare e rinominare).
