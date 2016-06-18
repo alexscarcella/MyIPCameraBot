@@ -12,14 +12,14 @@ import sys
 import time
 import os
 import telepot
-import requests
+import requests # TODO inserire la dipendeza nel readme
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from pprint import pprint
 from datetime import datetime
 
 
-class MyHandler(FileSystemEventHandler):
+class WatchdogHandler(FileSystemEventHandler):
     def on_created(self, event):
         print "Nuovo file: " + event.src_path
         global lastMessage
@@ -39,39 +39,50 @@ class MyHandler(FileSystemEventHandler):
             print("Non invio il messaggio. Devono passare almeno {0} secondi dall'ultimo invio ({1})".format(ScarcellaBot_config.SEND_SECONDS, lastMessage))
 
 
+class ScarcellaBotCommands(telepot.Bot):
+    # definisco il gestore che deve essere invocato nel loop del bot
+    def handle(self, msg):
+        # pprint(msg)
+        flavor = telepot.flavor(msg)
+        # Do your stuff according to `content_type` ...
+        if flavor == 'chat':
+            content_type, chat_type, chat_id = telepot.glance(msg)
+            print ("Chat message: ", content_type, chat_type, chat_id, msg['text'])
+            if msg['text'] == '/help':
+                bot.sendMessage(u, 'Ecco i miei comandi:\n'
+                                '/help: elenco comandi\n'
+                                '/jpg: ti invio le immagini delle camere\n')
+            elif msg['text'] == '/jpg':
+                print('ti mando le immagini')
+            else:
+                bot.sendMessage(u, 'Non capisco...')
+        else:
+            raise telepot.BadFlavor(msg)
+
+
 if __name__ == "__main__":
     lastMessage = datetime.now()  # datetime dell'ultimo messaggio inviato
     # ------ TELEGRAM --------------
-    bot = None  # imposto il telegram Bot
     try:
-        bot = telepot.Bot(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
-        utente = bot.getMe()
-        # scambio qualche messaggio all'avvio:
-        print(utente)
+        bot = ScarcellaBotCommands(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
+        print("Bot:", bot.getMe())
+        for u in ScarcellaBot_config.TELEGRAM_USERS_ID:
+            print('Invio il saluto a ', u)
+            bot.sendMessage(u, 'Ciao! Adesso sono attivo!')
+        bot.message_loop()
+        print("in ascolto...")
     except:
-        print "Impossibile inizializzare il BOT", sys.exc_info()[0]
-    for u in ScarcellaBot_config.TELEGRAM_USERS_ID:
-        print 'Invio il messaggio a: ' + u
-        bot.sendMessage(u, 'Mi sono avviato adesso! - ' + str(datetime.now()))
-
-
-    # definisco il gestore che deve essere invocato nel loop del bot
-    def handle(msg):
-        pprint(msg)
-    # avvio il loop del bot che resta in ascolto dei messaggi
-    # verso il BPT (passando il mio gestore)
-    bot.message_loop(handle)
-
-
+        print "Impossibile inizializzare il BOT: ", sys.exc_info()[0]
     # ------ WATCHDOG --------------
-    # watchdog folder
-    path = ScarcellaBot_config.IMAGES_PATH if ScarcellaBot_config.IMAGES_PATH > 1 else '.'
-    event_handler = MyHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path, recursive=False)
-    observer.start()
-
-
+    try:
+        path = ScarcellaBot_config.IMAGES_PATH if ScarcellaBot_config.IMAGES_PATH > 1 else '.'
+        event_handler = WatchdogHandler()
+        observer = Observer()
+        observer.schedule(event_handler, path, recursive=False)
+        observer.start()
+    except:
+        print "Errore del watchdog: ", sys.exc_info()[0]
+    # ------ Processo --------------
     # tengo in vita il processo fino a che
     # qualcuno non lo interrompe da tastiera
     try:
