@@ -25,8 +25,9 @@ class WatchdogHandler(FileSystemEventHandler):
     def on_created(self, event):
         print "New file: " + event.src_path
         global lastMessage
-        if os.path.splitext(event.src_path)[1] == ".jpg" and \
-                        (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS:
+        if os.path.splitext(event.src_path)[1] == ".jpg" \
+                and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS \
+                and send_ondemand is True:
             for user in ScarcellaBot_config.TELEGRAM_USERS_ID:
                 try:
                     f = open(event.src_path, 'rb')
@@ -70,10 +71,10 @@ class ScarcellaBotCommands(telepot.Bot):
 
     def __Comm_jpg(self):
         global send_ondemand
+        send_ondemand = True
         try:
             for camera in ScarcellaBot_camere.camere:
                 try:
-                    send_ondemand = True
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_send_jpg_to_folder']
                     print camera['id'] + ' --> ' + url_complete
                     r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
@@ -83,13 +84,12 @@ class ScarcellaBotCommands(telepot.Bot):
                     print "Impossibile inviare una immagine alla cartella: ", sys.exc_info()[0]
         except:
             print "Problemi con la configurazione delle camere: ", sys.exc_info()[0]
-        finally:
-            send_ondemand = False
 
 
 if __name__ == "__main__":
     lastMessage = datetime.now()  # datetime dell'ultimo messaggio inviato
     send_ondemand = False
+    send_ondemand_timer=0
     # ------ TELEGRAM --------------
     helpMessage = 'Ecco i miei comandi:\n'\
                     '/help: elenco comandi\n'\
@@ -118,6 +118,12 @@ if __name__ == "__main__":
     # qualcuno non lo interrompe da tastiera
     try:
         while True:
+            if send_ondemand is True:
+                send_ondemand_timer += 1
+            if send_ondemand_timer > ScarcellaBot_config.SEND_ONDEMAND_TIMOUT:
+                send_ondemand_timer = 0
+                send_ondemand = False
+            # print("send: {0} - timer: {1}".format(send_ondemand, send_ondemand_timer))
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
