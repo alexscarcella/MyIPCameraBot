@@ -23,7 +23,8 @@ class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
         print "Nuovo file: " + event.src_path
         global lastMessage
-        if os.path.splitext(event.src_path)[1] == ".jpg" and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS:
+        if os.path.splitext(event.src_path)[1] == ".jpg" and \
+                        (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS:
             for user in ScarcellaBot_config.TELEGRAM_USERS_ID:
                 try:
                     f = open(event.src_path, 'rb')
@@ -35,8 +36,7 @@ class MyHandler(FileSystemEventHandler):
                 finally:
                     f.close()
         else:
-            # TODO mattere il tempo mancante dall'ultimo invio. Oppure mettere il datetime dell'ultimo invio.
-            print "Non invio il messaggio. Devono passare almeno %s secondi dall'ultimo invio" % ScarcellaBot_config.SEND_SECONDS
+            print("Non invio il messaggio. Devono passare almeno {0} secondi dall'ultimo invio ({1})".format(ScarcellaBot_config.SEND_SECONDS, lastMessage))
 
 
 if __name__ == "__main__":
