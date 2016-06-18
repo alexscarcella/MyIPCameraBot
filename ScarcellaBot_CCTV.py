@@ -23,7 +23,7 @@ from datetime import datetime
 
 class WatchdogHandler(FileSystemEventHandler):
     def on_created(self, event):
-        print "Nuovo file: " + event.src_path
+        print "New file: " + event.src_path
         global lastMessage
         if os.path.splitext(event.src_path)[1] == ".jpg" and \
                         (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS:
@@ -69,19 +69,27 @@ class ScarcellaBotCommands(telepot.Bot):
 
 
     def __Comm_jpg(self):
+        global send_ondemand
         try:
             for camera in ScarcellaBot_camere.camere:
-                url_base = 'http://' + ScarcellaBot_camere.camera01['ip'] + ":" + ScarcellaBot_camere.camera01['port']
-                url_complete = url_base + ScarcellaBot_camere.camera01['url_send_jpg_to_folder']
-                r = requests.get(url_complete, auth=HTTPBasicAuth(ScarcellaBot_camere.camera01['user'],
-                                                                  ScarcellaBot_camere.camera01['pwd']))
-                print r.status_code
+                try:
+                    send_ondemand = True
+                    url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_send_jpg_to_folder']
+                    print camera['id'] + ' --> ' + url_complete
+                    r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                    print('HTTP Status: {0}'.format(r.status_code))
+                    time.sleep(5)
+                except:
+                    print "Impossibile inviare una immagine alla cartella: ", sys.exc_info()[0]
         except:
-            print "Impossibile inviare una immagine alla cartella: ", sys.exc_info()[0]
+            print "Problemi con la configurazione delle camere: ", sys.exc_info()[0]
+        finally:
+            send_ondemand = False
 
 
 if __name__ == "__main__":
     lastMessage = datetime.now()  # datetime dell'ultimo messaggio inviato
+    send_ondemand = False
     # ------ TELEGRAM --------------
     helpMessage = 'Ecco i miei comandi:\n'\
                     '/help: elenco comandi\n'\
