@@ -39,10 +39,8 @@ class WatchdogHandler(FileSystemEventHandler):
                     f.close()
             else:
                 print("Message not sent. The user may be configured without sending push. "
-                      "Or not sent to time-out. "
                       "They must spend at least {0} seconds after the last transmission ({1})".format(ScarcellaBot_config.SEND_SECONDS,
                                                                                                              lastMessage))
-
 class ScarcellaBotCommands(telepot.Bot):
     # definisco il gestore che deve essere invocato nel loop del bot
     def handle(self, msg):
@@ -53,55 +51,66 @@ class ScarcellaBotCommands(telepot.Bot):
             content_type, chat_type, chat_id = telepot.glance(msg)
             print ("Chat message: ", content_type, chat_type, chat_id, msg['text'])
             if msg['text'] == '/help':
-                self.__Comm_help(chat_id)
+                self.__comm_help(chat_id)
             elif msg['text'] == '/jpg':
-                self.__Comm_jpg(chat_id)
+                self.__comm_jpg(chat_id)
             elif msg['text'] == '/status':
-                self.__Comm_status(chat_id)
+                self.__comm_status(chat_id)
             else:
                 bot.sendMessage(u, 'Non capisco...')
         else:
             raise telepot.BadFlavor(msg)
 
-
-    def __Comm_help(self, toUser):
+    def __comm_help(self, toUser):
         try:
             bot.sendMessage(toUser, helpMessage)
+            print('Message sent!')
         except:
             print "Unable to send help message: ", sys.exc_info()[0]
 
-
-    def __Comm_jpg(self, toUser):
+    def __comm_jpg(self, toUser):
         try:
             for camera in ScarcellaBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_send_jpg_to_folder']
                     print camera['id'] + ' --> ' + url_complete
                     r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
-                    print('HTTP Status: {0}'.format(r.status_code))
-                    time.sleep(3)
-                    last_jpg = max(glob.iglob(ScarcellaBot_config.IMAGES_PATH + '/*.jpg'), key=os.path.getctime)
-                    try:
-                        f = open(last_jpg, 'rb')
-                        print('Sending the message to ', toUser)
-                        bot.sendPhoto(toUser, f)
-                    except:
-                        print "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
-                    finally:
-                        f.close()
+                    if r.status_code == 200:
+                        print('HTTP Status: {0}'.format(r.status_code))
+                        time.sleep(3)
+                        last_jpg = max(glob.iglob(ScarcellaBot_config.IMAGES_PATH + '/*.jpg'), key=os.path.getctime)
+                        try:
+                            f = open(last_jpg, 'rb')
+                            print('Sending the message to ', toUser)
+                            bot.sendPhoto(toUser, f)
+                        except:
+                            print "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
+                        finally:
+                            f.close()
                 except:
-                    print "Impossibile inviare una immagine alla cartella: ", sys.exc_info()[0]
+                    print "Unable to get image: ", sys.exc_info()[0]
         except:
-            print "Problemi con la configurazione delle camere: ", sys.exc_info()[0]
+            print "Cameras configuration error: ", sys.exc_info()[0]
 
-
-    def __Comm_status(self, toUser):
+    def __comm_status(self, toUser):
         try:
+            user = self.__getUser(toUser)
+            if user['push'] == True:
+                notifiche="ACCESE"
+            else:
+                notifiche= "SPENTE"
             statusMinutes = ((((datetime.now()-startTime).seconds) % 3600) // 60)
-            bot.sendMessage(toUser, "Tutto ok. Sono in allerta da {0} minuti!".format(statusMinutes))
+            bot.sendMessage(toUser, "Ciao {2}. Tutto ok.\nSono in allerta da {0} minuti!\n"
+                            "Le tue notifiche push sono {1}!".format(statusMinutes, notifiche, user['name']))
+            print('Message sent!')
         except:
             print "Unable to send status message: ", sys.exc_info()[0]
 
+    def __getUser(self, userID):
+        for usr in ScarcellaBot_config.users:
+            if usr['telegram_id'] == str(userID):
+                return usr
+        return None
 
 if __name__ == "__main__":
     startTime = datetime.now()
