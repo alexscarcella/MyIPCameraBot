@@ -137,10 +137,10 @@ if __name__ == "__main__":
         while 1:
             if send_ondemand is True:
                 send_ondemand_timer += 1
+                print("send_ondemand: {0} - send_ondemand_timer: {1}".format(send_ondemand, send_ondemand_timer))
             if send_ondemand_timer > ScarcellaBot_config.SEND_ONDEMAND_TIMOUT:
                 send_ondemand_timer = 0
                 send_ondemand = False
-            # print("send: {0} - timer: {1}".format(send_ondemand, send_ondemand_timer))
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
