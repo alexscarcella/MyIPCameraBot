@@ -56,6 +56,8 @@ class ScarcellaBotCommands(telepot.Bot):
                 self.__Comm_help()
             elif msg['text'] == '/jpg':
                 self.__Comm_jpg()
+            elif msg['text'] == '/status':
+                self.__Comm_status(chat_id)
             else:
                 bot.sendMessage(u, 'Non capisco...')
         else:
@@ -63,11 +65,10 @@ class ScarcellaBotCommands(telepot.Bot):
 
 
     def __Comm_help(self):
-        for u in ScarcellaBot_config.users:
-            try:
-                bot.sendMessage(u['telegram_id'], helpMessage)
-            except:
-                print "Unable to send help message: ", sys.exc_info()[0]
+        try:
+            bot.sendMessage(u['telegram_id'], helpMessage)
+        except:
+            print "Unable to send help message: ", sys.exc_info()[0]
 
 
     def __Comm_jpg(self):
@@ -87,14 +88,24 @@ class ScarcellaBotCommands(telepot.Bot):
             print "Problemi con la configurazione delle camere: ", sys.exc_info()[0]
 
 
+    def __Comm_status(self, toUser):
+        try:
+            statusMinutes = ((((datetime.now()-startTime).seconds) % 3600) // 60)
+            bot.sendMessage(toUser, "Tutto ok. Sono in allerta da {0} minuti!".format(statusMinutes))
+        except:
+            print "Unable to send help message: ", sys.exc_info()[0]
+
+
 if __name__ == "__main__":
+    startTime = datetime.now()
     lastMessage = datetime.now()  # datetime dell'ultimo messaggio inviato
     send_ondemand = False
-    send_ondemand_timer=0
+    send_ondemand_timer = 0
     # ------ TELEGRAM --------------
     helpMessage = 'Ecco i miei comandi:\n'\
                     '/help: elenco comandi (questo!)\n'\
-                    '/jpg: ti invio le immagini JPG di tutte le tue camere\n'
+                    '/jpg: ti invio le immagini JPG di tutte le tue camere\n'\
+                    '/status: ti dico come sto\n'
     try:
         bot = ScarcellaBotCommands(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
         print("Bot:", bot.getMe())
