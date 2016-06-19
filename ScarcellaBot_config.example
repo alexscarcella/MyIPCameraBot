@@ -1,5 +1,9 @@
 # fil#!/usr/bin/env python2.7
 
+# -----------------------------------------------------------------------------
+# ------------------- BASIC CONFIGURATION -------------------------------------
+# -----------------------------------------------------------------------------
+
 # inserite qui il Token segreto del BOT Telegram
 TELEGRAM_BOT_TOKEN = "fffffffffffffffffffffffffffffffffff"
 
@@ -15,3 +19,30 @@ SEND_SECONDS = 60
 
 # tempo necessario all'invio delle immagini di tutte le camere prima del time-out
 SEND_ONDEMAND_TIMOUT = 18
+
+
+# -----------------------------------------------------------------------------
+# ------------------- CAMERE CONFIGURATION ------------------------------------
+# -----------------------------------------------------------------------------
+
+# camera 01
+camera01 = dict()
+camera01['id'] = 'ingresso'
+camera01['model'] = 'D-Link DCS-932LB'
+camera01['ip'] = '127.0.0.2'
+camera01['port'] = '80'
+camera01['user'] = 'user'
+camera01['pwd'] = 'pwd'
+camera01['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+
+# camera 02
+camera02 = dict()
+camera02['id'] = 'sala'
+camera02['model'] = 'D-Link DCS-932LB'
+camera02['ip'] = '127.0.0.3'
+camera02['port'] = '80'
+camera02['user'] = 'user'
+camera02['pwd'] = 'pwd'
+camera02['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+
+camere = (camera01, camera02)

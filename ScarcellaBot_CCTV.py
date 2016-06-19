@@ -8,7 +8,6 @@ TELEGRAM_USERS_ID
 IMAGES_PATH
 """
 import ScarcellaBot_config
-import ScarcellaBot_camere
 import sys
 import time
 import os
@@ -75,7 +74,7 @@ class ScarcellaBotCommands(telepot.Bot):
         global send_ondemand
         send_ondemand = True
         try:
-            for camera in ScarcellaBot_camere.camere:
+            for camera in ScarcellaBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_send_jpg_to_folder']
                     print camera['id'] + ' --> ' + url_complete
