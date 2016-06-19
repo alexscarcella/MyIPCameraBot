@@ -53,7 +53,7 @@ class ScarcellaBotCommands(telepot.Bot):
             content_type, chat_type, chat_id = telepot.glance(msg)
             print ("Chat message: ", content_type, chat_type, chat_id, msg['text'])
             if msg['text'] == '/help':
-                self.__Comm_help()
+                self.__Comm_help(chat_id)
             elif msg['text'] == '/jpg':
                 self.__Comm_jpg()
             elif msg['text'] == '/status':
@@ -64,9 +64,9 @@ class ScarcellaBotCommands(telepot.Bot):
             raise telepot.BadFlavor(msg)
 
 
-    def __Comm_help(self):
+    def __Comm_help(self, toUser):
         try:
-            bot.sendMessage(u['telegram_id'], helpMessage)
+            bot.sendMessage(toUser, helpMessage)
         except:
             print "Unable to send help message: ", sys.exc_info()[0]
 
@@ -93,7 +93,7 @@ class ScarcellaBotCommands(telepot.Bot):
             statusMinutes = ((((datetime.now()-startTime).seconds) % 3600) // 60)
             bot.sendMessage(toUser, "Tutto ok. Sono in allerta da {0} minuti!".format(statusMinutes))
         except:
-            print "Unable to send help message: ", sys.exc_info()[0]
+            print "Unable to send status message: ", sys.exc_info()[0]
 
 
 if __name__ == "__main__":
