@@ -1,22 +1,20 @@
 #!/usr/bin/env python2.7
 """
-creare un file di configurazione ScarcellaBot_config
-nel quale definire le seguenti variabili
-
-TELEGRAM_BOT_TOKEN
-TELEGRAM_USERS_ID
-IMAGES_PATH
+Devi editare il file di configurazione ScarcellaBot_config.py
+Puoi fare riferimento al file di esempio ScarcellaBot_config.example
+-
+You must edit the configuration file ScarcellaBot_config.py
+You may refer to the sample files ScarcellaBot_config.example
 """
 import ScarcellaBot_config
 import sys
 import time
 import os
 import telepot
-import requests # TODO inserire la dipendeza nel readme
+import requests
 from requests.auth import HTTPBasicAuth
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from pprint import pprint
 from datetime import datetime
 
 
@@ -25,24 +23,25 @@ class WatchdogHandler(FileSystemEventHandler):
         print "New file: " + event.src_path
         global lastMessage
         if os.path.splitext(event.src_path)[1] != ".jpg":
-            print("Il file non e' un .jpg")
-            return None
-        if (send_ondemand is True) or \
-                (send_ondemand is False and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS):
-            for u in ScarcellaBot_config.users:
+            print("The file is not a .jpg")
+            return None  # no image .jpg
+        for u in ScarcellaBot_config.users:
+            if (send_ondemand is True) or \
+                    (send_ondemand is False and u['push'] is True and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS):
                 try:
                     f = open(event.src_path, 'rb')
-                    print('Invio il messaggio a: ', u)
+                    print('Sending the message to ', u)
                     bot.sendPhoto(u['telegram_id'], f)
                     lastMessage = datetime.now()
                 except:
-                    print "Impossibile inviare l'immagine %s a %s" % (sys.exc_info()[0], u['name'])
+                    print "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
                 finally:
                     f.close()
-        else:
-            print("Non invio il messaggio. Devono passare almeno {0} secondi dall'ultimo invio ({1})".format(ScarcellaBot_config.SEND_SECONDS,
+            else:
+                print("Message not sent. The user may be configured without sending push. "
+                      "Or not sent to time-out. "
+                      "They must spend at least {0} seconds after the last transmission ({1})".format(ScarcellaBot_config.SEND_SECONDS,
                                                                                                              lastMessage))
-
 
 class ScarcellaBotCommands(telepot.Bot):
     # definisco il gestore che deve essere invocato nel loop del bot
