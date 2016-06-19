@@ -26,12 +26,12 @@ Ad esempio:
 ```
 # fil#!/usr/bin/env python2.7
 
+# -----------------------------------------------------------------------------
+# ------------------- BASIC CONFIGURATION -------------------------------------
+# -----------------------------------------------------------------------------
+
 # inserite qui il Token segreto del BOT Telegram
 TELEGRAM_BOT_TOKEN = "fffffffffffffffffffffffffffffffffff"
-
-# inserite qui gli ID degli utenti Telegram a cui volete spedire le immagini (lista separata da virgola)
-# Meglio tenere questi dati riservati
-TELEGRAM_USERS_ID = ["0000000000", "11111111111"]
 
 # path completo della cartella contenente le immagini (un esempio:)
 IMAGES_PATH = "/Volumes/images/cctv"
@@ -41,6 +41,24 @@ SEND_SECONDS = 60
 
 # tempo necessario all'invio delle immagini di tutte le camere prima del time-out
 SEND_ONDEMAND_TIMOUT = 18
+
+# -----------------------------------------------------------------------------
+# ------------------- CHAT USERS ----------------------------------------------
+# -----------------------------------------------------------------------------
+
+# user 01
+user01 = dict()
+user01['name'] = 'Mario'
+user01['telegram_id'] = '111111111'
+user01['push'] = True
+
+# user 02
+user02 = dict()
+user02['name'] = 'Alice'
+user02['telegram_id'] = '22222222'
+user02['push'] = False
+
+users = (user01, user02)
 
 # -----------------------------------------------------------------------------
 # ------------------- CAMERE CONFIGURATION ------------------------------------
