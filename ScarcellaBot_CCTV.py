@@ -63,10 +63,11 @@ class ScarcellaBotCommands(telepot.Bot):
 
 
     def __Comm_help(self):
-        try:
-            bot.sendMessage(u, helpMessage)
-        except:
-            print "Impossibile inviare il messaggio di help: ", sys.exc_info()[0]
+        for u in ScarcellaBot_config.users:
+            try:
+                bot.sendMessage(u['telegram_id'], helpMessage)
+            except:
+                print "Unable to send help message: ", sys.exc_info()[0]
 
 
     def __Comm_jpg(self):
