@@ -10,6 +10,7 @@ import ScarcellaBot_config
 import sys
 import time
 import os
+import glob
 import telepot
 import requests
 from requests.auth import HTTPBasicAuth
@@ -26,8 +27,7 @@ class WatchdogHandler(FileSystemEventHandler):
             print("The file is not a .jpg")
             return None  # no image .jpg
         for u in ScarcellaBot_config.users:
-            if (send_ondemand is True) or \
-                    (send_ondemand is False and u['push'] is True and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS):
+            if (u['push'] is True and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS):
                 try:
                     f = open(event.src_path, 'rb')
                     print('Sending the message to ', u)
@@ -55,7 +55,7 @@ class ScarcellaBotCommands(telepot.Bot):
             if msg['text'] == '/help':
                 self.__Comm_help(chat_id)
             elif msg['text'] == '/jpg':
-                self.__Comm_jpg()
+                self.__Comm_jpg(chat_id)
             elif msg['text'] == '/status':
                 self.__Comm_status(chat_id)
             else:
@@ -71,9 +71,7 @@ class ScarcellaBotCommands(telepot.Bot):
             print "Unable to send help message: ", sys.exc_info()[0]
 
 
-    def __Comm_jpg(self):
-        global send_ondemand
-        send_ondemand = True
+    def __Comm_jpg(self, toUser):
         try:
             for camera in ScarcellaBot_config.camere:
                 try:
@@ -81,7 +79,16 @@ class ScarcellaBotCommands(telepot.Bot):
                     print camera['id'] + ' --> ' + url_complete
                     r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
                     print('HTTP Status: {0}'.format(r.status_code))
-                    time.sleep(5)
+                    time.sleep(3)
+                    last_jpg = max(glob.iglob(ScarcellaBot_config.IMAGES_PATH + '/*.jpg'), key=os.path.getctime)
+                    try:
+                        f = open(last_jpg, 'rb')
+                        print('Sending the message to ', toUser)
+                        bot.sendPhoto(toUser, f)
+                    except:
+                        print "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
+                    finally:
+                        f.close()
                 except:
                     print "Impossibile inviare una immagine alla cartella: ", sys.exc_info()[0]
         except:
@@ -99,8 +106,6 @@ class ScarcellaBotCommands(telepot.Bot):
 if __name__ == "__main__":
     startTime = datetime.now()
     lastMessage = datetime.now()  # datetime dell'ultimo messaggio inviato
-    send_ondemand = False
-    send_ondemand_timer = 0
     # ------ TELEGRAM --------------
     helpMessage = 'Ecco i miei comandi:\n'\
                     '/help: elenco comandi (questo!)\n'\
@@ -135,12 +140,6 @@ if __name__ == "__main__":
     # qualcuno non lo interrompe da tastiera
     try:
         while 1:
-            if send_ondemand is True:
-                send_ondemand_timer += 1
-                print("send_ondemand: {0} - send_ondemand_timer: {1}".format(send_ondemand, send_ondemand_timer))
-            if send_ondemand_timer > ScarcellaBot_config.SEND_ONDEMAND_TIMOUT:
-                send_ondemand_timer = 0
-                send_ondemand = False
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
