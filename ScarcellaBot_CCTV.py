@@ -98,13 +98,18 @@ if __name__ == "__main__":
     try:
         bot = ScarcellaBotCommands(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
         print("Bot:", bot.getMe())
-        for u in ScarcellaBot_config.TELEGRAM_USERS_ID:
+    except:
+        print "Impossibile inizializzare il BOT: ", sys.exc_info()[0]
+        exit()
+    try:
+        for u in ScarcellaBot_config.users:
             print('Invio il saluto a ', u)
-            bot.sendMessage(u, 'Ciao! Adesso sono attivo!\n\n' + helpMessage)
+            welcome = 'Adesso sono attivo!\n\nPosso inviarti le immagini delle camere quando rilevo un movimento. Oppure potrai chedermele tu quando vuoi.\n\n'
+            bot.sendMessage(u['telegram_id'], 'Ciao {0}! '.format(u['name']) + welcome + helpMessage)
         bot.message_loop()
         print("in ascolto...")
     except:
-        print "Impossibile inizializzare il BOT: ", sys.exc_info()[0]
+        print "Problemi nella configuazione degli utenti: ", sys.exc_info()[0]
     # ------ WATCHDOG --------------
     try:
         path = ScarcellaBot_config.IMAGES_PATH if ScarcellaBot_config.IMAGES_PATH > 1 else '.'

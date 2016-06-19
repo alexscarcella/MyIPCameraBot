@@ -17,8 +17,10 @@ con il tempo mi piacerebbe implementare un set completo di comandi per spegnere 
 
 ## ScarcellaBot_config.py
 
-E' necessario creare il file di configurazione '`ScarcellaBot_config.py` da mettere nella stessa cartella dello script python.
-Il file definisce i valori di alcuni parametri (alcuni dei quali è meglio tenere segreti).
+E' necessario creare il file di configurazione `ScarcellaBot_config.py` da mettere nella stessa cartella dello script python. Potete editare e rinominare il file di esempio `ScarcellaBot_config.example`:
+si tratta ancora di un files di configurazione grossolano (di fatto è un file python, quindi attenti alla sintassi).
+
+Il file definisce i valori di alcuni parametri (alcuni dei quali è meglio tenere segreti!).
 Ad esempio:
 
 ```
@@ -39,6 +41,32 @@ SEND_SECONDS = 60
 
 # tempo necessario all'invio delle immagini di tutte le camere prima del time-out
 SEND_ONDEMAND_TIMOUT = 18
+
+# -----------------------------------------------------------------------------
+# ------------------- CAMERE CONFIGURATION ------------------------------------
+# -----------------------------------------------------------------------------
+
+# camera 01
+camera01 = dict()
+camera01['id'] = 'ingresso'
+camera01['model'] = 'D-Link DCS-932LB'
+camera01['ip'] = '127.0.0.2'
+camera01['port'] = '80'
+camera01['user'] = 'user'
+camera01['pwd'] = 'pwd'
+camera01['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+
+# camera 02
+camera02 = dict()
+camera02['id'] = 'sala'
+camera02['model'] = 'D-Link DCS-932LB'
+camera02['ip'] = '127.0.0.3'
+camera02['port'] = '80'
+camera02['user'] = 'user'
+camera02['pwd'] = 'pwd'
+camera02['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+
+camere = (camera01, camera02)
 ```
 
 E' possibile usare come modello il file `ScarcellaBot_config.example` (da editare e rinominare).
