@@ -1,13 +1,61 @@
 # fil#!/usr/bin/env python2.7
 
+# -----------------------------------------------------------------------------
+# ------------------- BASIC CONFIGURATION -------------------------------------
+# -----------------------------------------------------------------------------
+
 # inserite qui il Token segreto del BOT Telegram
 TELEGRAM_BOT_TOKEN = "fffffffffffffffffffffffffffffffffff"
 
-# inserite qui gli ID degli utenti Telegram a cui volete spedire le immagini (lista separata da virgola)
-TELEGRAM_USERS_ID = ["0000000000", "11111111111"]
-
 # path completo della cartella contenente le immagini (un esempio:)
-IMAGES_PATH = "/Volumes/dati/cctv"
+IMAGES_PATH = "/Volumes/images/cctv"
 
 # l'intervallo di tempo minimo (in secondi) che deve trascorrere da un messagio ed il successivo
 SEND_SECONDS = 60
+
+# tempo necessario all'invio delle immagini di tutte le camere prima del time-out
+SEND_ONDEMAND_TIMOUT = 18
+
+# -----------------------------------------------------------------------------
+# ------------------- CHAT USERS ----------------------------------------------
+# -----------------------------------------------------------------------------
+
+# user 01
+user01 = dict()
+user01['name'] = 'Mario'
+user01['telegram_id'] = '111111111'
+user01['push'] = True
+
+# user 02
+user02 = dict()
+user02['name'] = 'Alice'
+user02['telegram_id'] = '22222222'
+user02['push'] = False
+
+users = (user01, user02)
+
+# -----------------------------------------------------------------------------
+# ------------------- CAMERE CONFIGURATION ------------------------------------
+# -----------------------------------------------------------------------------
+
+# camera 01
+camera01 = dict()
+camera01['id'] = 'ingresso'
+camera01['model'] = 'D-Link DCS-932LB'
+camera01['ip'] = '127.0.0.2'
+camera01['port'] = '80'
+camera01['user'] = 'user'
+camera01['pwd'] = 'pwd'
+camera01['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+
+# camera 02
+camera02 = dict()
+camera02['id'] = 'sala'
+camera02['model'] = 'D-Link DCS-932LB'
+camera02['ip'] = '127.0.0.3'
+camera02['port'] = '80'
+camera02['user'] = 'user'
+camera02['pwd'] = 'pwd'
+camera02['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+
+camere = (camera01, camera02)
