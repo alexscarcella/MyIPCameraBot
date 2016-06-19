@@ -27,7 +27,7 @@ class WatchdogHandler(FileSystemEventHandler):
             print("The file is not a .jpg")
             return None  # no image .jpg
         for u in ScarcellaBot_config.users:
-            if (u['push'] is True and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS):
+            if u['push'] is True and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS:
                 try:
                     f = open(event.src_path, 'rb')
                     print('Sending the message to ', u)
@@ -39,14 +39,15 @@ class WatchdogHandler(FileSystemEventHandler):
                     f.close()
             else:
                 print("Message not sent. The user may be configured without sending push. "
-                      "They must spend at least {0} seconds after the last transmission ({1})".format(ScarcellaBot_config.SEND_SECONDS,
-                                                                                                             lastMessage))
+                      "They must spend at least {0} seconds"
+                      "after the last transmission ({1})".format(ScarcellaBot_config.SEND_SECONDS, lastMessage))
+
 class ScarcellaBotCommands(telepot.Bot):
+
     # definisco il gestore che deve essere invocato nel loop del bot
     def handle(self, msg):
         # pprint(msg)
         flavor = telepot.flavor(msg)
-        # Do your stuff according to `content_type` ...
         if flavor == 'chat':
             content_type, chat_type, chat_id = telepot.glance(msg)
             print ("Chat message: ", content_type, chat_type, chat_id, msg['text'])
@@ -95,13 +96,14 @@ class ScarcellaBotCommands(telepot.Bot):
     def __comm_status(self, toUser):
         try:
             user = self.__getUser(toUser)
-            if user['push'] == True:
+            if user['push'] is True:
                 notifiche="ACCESE"
             else:
                 notifiche= "SPENTE"
             statusMinutes = ((((datetime.now()-startTime).seconds) % 3600) // 60)
-            bot.sendMessage(toUser, "Ciao {2}. Tutto ok.\nSono in allerta da {0} minuti!\n"
-                            "Le tue notifiche push sono {1}!".format(statusMinutes, notifiche, user['name']))
+            bot.sendMessage(toUser, "Ciao {2}. Tutto ok.\n"
+                                    "Sono in allerta da {0} minuti!\n"
+                                    "Le tue notifiche push sono {1}!".format(statusMinutes, notifiche, user['name']))
             print('Message sent!')
         except:
             print "Unable to send status message: ", sys.exc_info()[0]
@@ -129,7 +131,9 @@ if __name__ == "__main__":
     try:
         for u in ScarcellaBot_config.users:
             print('Welcome...', u)
-            welcome = 'Adesso sono attivo!\n\nPosso inviarti le immagini delle camere quando rilevo un movimento. Oppure potrai chedermele tu quando vuoi.\n\n'
+            welcome = 'Adesso sono attivo!\n\n' \
+                      'Posso inviarti le immagini delle camere quando rilevo un movimento. ' \
+                      'Oppure potrai chedermele tu quando vuoi.\n\n'
             bot.sendMessage(u['telegram_id'], 'Ciao {0}! '.format(u['name']) + welcome + helpMessage)
         bot.message_loop()
         print("in ascolto...")
