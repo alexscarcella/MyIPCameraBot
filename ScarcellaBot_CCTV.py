@@ -29,14 +29,14 @@ class WatchdogHandler(FileSystemEventHandler):
             return None
         if (send_ondemand is True) or \
                 (send_ondemand is False and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS):
-            for user in ScarcellaBot_config.TELEGRAM_USERS_ID:
+            for u in ScarcellaBot_config.users:
                 try:
                     f = open(event.src_path, 'rb')
-                    print 'Invio il messaggio a: ' + user
-                    bot.sendPhoto(user, f)
+                    print('Invio il messaggio a: ', u)
+                    bot.sendPhoto(u['telegram_id'], f)
                     lastMessage = datetime.now()
                 except:
-                    print "Impossibile inviare l'immagine %s a %s" % (sys.exc_info()[0], user)
+                    print "Impossibile inviare l'immagine %s a %s" % (sys.exc_info()[0], u['name'])
                 finally:
                     f.close()
         else:
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     # ------ TELEGRAM --------------
     helpMessage = 'Ecco i miei comandi:\n'\
                     '/help: elenco comandi (questo!)\n'\
-                    '/jpg: ti invio le immagini JPG delle camere\n'
+                    '/jpg: ti invio le immagini JPG di tutte le tue camere\n'
     try:
         bot = ScarcellaBotCommands(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
         print("Bot:", bot.getMe())
@@ -103,7 +103,7 @@ if __name__ == "__main__":
         exit()
     try:
         for u in ScarcellaBot_config.users:
-            print('Invio il saluto a ', u)
+            print('Welcome...', u)
             welcome = 'Adesso sono attivo!\n\nPosso inviarti le immagini delle camere quando rilevo un movimento. Oppure potrai chedermele tu quando vuoi.\n\n'
             bot.sendMessage(u['telegram_id'], 'Ciao {0}! '.format(u['name']) + welcome + helpMessage)
         bot.message_loop()
