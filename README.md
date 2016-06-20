@@ -1,7 +1,9 @@
 # ScarcellaBot_CCTV
 
 Si tratta di un semplice gestore per un **[BOT di Telegram](https://core.telegram.org/bots)** che preleva immagini _.jpg_ da una cartella sul file system locale e le invia ad uno o più account Telegram.
-Le immagini vengono spedite in chat man mano che vengono create sul file system: il modulo `whatchdog` sta infatti in ascolto su una cartella locale. Mentre il modulo `telepot` si occupa di gestire il BOT ed i messaggi.
+Le immagini vengono spedite in chat man mano che vengono create sul file system: il modulo `whatchdog` è infatti in ascolto su una cartella locale. Mentre il modulo `telepot` si occupa di gestire il BOT.
+
+Potete scaricare l'ultima release dello script [da qui](https://github.com/alexscarcella/ScarcellaBot_CCTV/releases).
 
 ![alt text](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBot_CCTV.png?raw=true "un esempio di utilizzo")
 
@@ -12,6 +14,7 @@ Personalmente uso questo semplice script con il sistema di videosorveglianza cas
 
 `/help`: elenco comandi (questo!)
 `/jpg`: ti invio le immagini JPG di tutte le camere
+`/status`: ti dico come sto
 
 TODO:
 con il tempo mi piacerebbe implementare un set completo di comandi per spegnere ed accendere le camere, inviarmi immagini o spezzoni video a richiesta o cambiare alcuni parametri di funzionamento.
