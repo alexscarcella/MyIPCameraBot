@@ -30,15 +30,15 @@ class WatchdogHandler(FileSystemEventHandler):
             if u['push'] is True and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS:
                 try:
                     f = open(event.src_path, 'rb')
-                    print('Sending the message to ', u)
+                    print(str(datetime.now()), 'Sending the message to ', u)
                     bot.sendPhoto(u['telegram_id'], f)
                     lastMessage = datetime.now()
                 except:
-                    print "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
+                    print str(datetime.now()), "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
                 finally:
                     f.close()
             else:
-                print("Message not sent. The user may be configured without sending push. "
+                print(str(datetime.now()), "Message not sent. The user may be configured without sending push. "
                       "They must spend at least {0} seconds"
                       "after the last transmission ({1})".format(ScarcellaBot_config.SEND_SECONDS, lastMessage))
 
@@ -77,15 +77,16 @@ class ScarcellaBotCommands(telepot.Bot):
                     print camera['id'] + ' --> ' + url_complete
                     r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
                     if r.status_code == 200:
-                        print('HTTP Status: {0}'.format(r.status_code))
-                        time.sleep(3)
+                        print(str(datetime.now()), 'HTTP Status: {0}'.format(r.status_code))
+                        time.sleep(5)
                         last_jpg = max(glob.iglob(ScarcellaBot_config.IMAGES_PATH + '/*.jpg'), key=os.path.getctime)
                         try:
                             f = open(last_jpg, 'rb')
-                            print('Sending the message to ', toUser)
+                            print(str(datetime.now()),'Sending the message to ', toUser)
                             bot.sendPhoto(toUser, f)
+                            time.sleep(1)
                         except:
-                            print "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
+                            print str(datetime.now()), "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
                         finally:
                             f.close()
                 except:
@@ -100,7 +101,7 @@ class ScarcellaBotCommands(telepot.Bot):
                 notifiche="ACCESE"
             else:
                 notifiche= "SPENTE"
-            statusMinutes = ((((datetime.now()-startTime).seconds) % 3600) // 60)
+            statusMinutes = (((datetime.now()-startTime).seconds) // 60) % 60
             bot.sendMessage(toUser, "Ciao {2}. Tutto ok.\n"
                                     "Sono in allerta da {0} minuti!\n"
                                     "Le tue notifiche push sono {1}!".format(statusMinutes, notifiche, user['name']))
