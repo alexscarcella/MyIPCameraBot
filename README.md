@@ -5,7 +5,7 @@ Le immagini vengono spedite in chat man mano che vengono create sul file system:
 
 Potete scaricare l'ultima release dello script [da qui](https://github.com/alexscarcella/ScarcellaBot_CCTV/releases).
 
-![alt text](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBot_CCTV.png?raw=true "un esempio di utilizzo"){: style="float:right"}
+.right[![Right-aligned image](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBot_CCTV.png?raw=true "un esempio di utilizzo")
 
 Personalmente uso questo semplice script con il sistema di videosorveglianza casalingo: ogni camera IP è in grado di inviare snapshot _.jpg_ su un server FTP o su una cartella condivisa nella rete locale. In questo modo è possibile farsi spedire le immagini di una camera, magari acquisita a valle di un movimento o di un romore, direttamente su una chat dedicata su Telegram.
 
