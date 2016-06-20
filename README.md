@@ -12,11 +12,9 @@ Personalmente uso questo semplice script con il sistema di videosorveglianza cas
 
 ## Comandi del bot
 
-`/help`: elenco comandi (questo!)
-
-`/jpg`: ti invio le immagini JPG di tutte le camere
-
-`/status`: ti dico come sto
+- `/help`: elenco comandi (questo!)
+- `/jpg`: ti invio le immagini JPG di tutte le camere
+- `/status`: ti dico come sto
 
 TODO:
 con il tempo mi piacerebbe implementare un set completo di comandi per spegnere ed accendere le camere, inviarmi immagini o spezzoni video a richiesta o cambiare alcuni parametri di funzionamento.
