@@ -13,7 +13,9 @@ Personalmente uso questo semplice script con il sistema di videosorveglianza cas
 ## Comandi del bot
 
 `/help`: elenco comandi (questo!)
+
 `/jpg`: ti invio le immagini JPG di tutte le camere
+
 `/status`: ti dico come sto
 
 TODO:
