@@ -101,7 +101,7 @@ class ScarcellaBotCommands(telepot.Bot):
                 notifiche="ACCESE"
             else:
                 notifiche= "SPENTE"
-            statusMinutes = (((datetime.now()-startTime).seconds) // 60) % 60
+            statusMinutes = ((datetime.now()-startTime).total_seconds()) // 60
             bot.sendMessage(toUser, "Ciao {2}. Tutto ok.\n"
                                     "Sono in allerta da {0} minuti!\n"
                                     "Le tue notifiche push sono {1}!".format(statusMinutes, notifiche, user['name']))
