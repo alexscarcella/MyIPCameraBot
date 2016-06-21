@@ -21,6 +21,9 @@ from datetime import datetime
 
 class WatchdogHandler(FileSystemEventHandler):
     def on_created(self, event):
+        if pauseWatchDog is True:
+            print str(datetime.now()), "Message not send. Whatchdog paused."
+            return
         print "New file: " + event.src_path
         global lastMessage
         if os.path.splitext(event.src_path)[1] != ".jpg":
@@ -71,6 +74,8 @@ class ScarcellaBotCommands(telepot.Bot):
 
     def __comm_jpg(self, toUser):
         try:
+            global pauseWatchDog
+            pauseWatchDog = True
             for camera in ScarcellaBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_send_jpg_to_folder']
@@ -78,7 +83,7 @@ class ScarcellaBotCommands(telepot.Bot):
                     r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
                     if r.status_code == 200:
                         print(str(datetime.now()), 'HTTP Status: {0}'.format(r.status_code))
-                        time.sleep(5)
+                        time.sleep(4)
                         last_jpg = max(glob.iglob(ScarcellaBot_config.IMAGES_PATH + '/*.jpg'), key=os.path.getctime)
                         try:
                             f = open(last_jpg, 'rb')
@@ -93,6 +98,8 @@ class ScarcellaBotCommands(telepot.Bot):
                     print "Unable to get image: ", sys.exc_info()[0]
         except:
             print "Cameras configuration error: ", sys.exc_info()[0]
+        finally:
+            pauseWatchDog = False
 
     def __comm_status(self, toUser):
         try:
@@ -118,6 +125,7 @@ class ScarcellaBotCommands(telepot.Bot):
 if __name__ == "__main__":
     startTime = datetime.now()
     lastMessage = datetime.now()  # datetime dell'ultimo messaggio inviato
+    pauseWatchDog = False
     # ------ TELEGRAM --------------
     helpMessage = 'Ecco i miei comandi:\n'\
                     '/help: elenco comandi (questo!)\n'\
@@ -157,5 +165,5 @@ if __name__ == "__main__":
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
-        bot.sendMessage(u, 'Stop!! - ')
+        # bot.sendMessage(u, 'Stop!! - ')
     observer.join()
