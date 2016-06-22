@@ -83,13 +83,14 @@ class ScarcellaBotCommands(telepot.Bot):
                     r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
                     if r.status_code == 200:
                         print(str(datetime.now()), 'HTTP Status: {0}'.format(r.status_code))
-                        time.sleep(4)
+                        time.sleep(6)
                         last_jpg = max(glob.iglob(ScarcellaBot_config.IMAGES_PATH + '/*.jpg'), key=os.path.getctime)
                         try:
+                            last_timestamp = os.path.getatime(last_jpg)
+                            bot.sendMessage(toUser, datetime.fromtimestamp(last_timestamp).strftime('%d-%m %H:%M:%S'))
                             f = open(last_jpg, 'rb')
                             print(str(datetime.now()),'Sending the message to ', toUser)
                             bot.sendPhoto(toUser, f)
-                            time.sleep(1)
                         except:
                             print str(datetime.now()), "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
                         finally:
@@ -99,6 +100,7 @@ class ScarcellaBotCommands(telepot.Bot):
         except:
             print "Cameras configuration error: ", sys.exc_info()[0]
         finally:
+            time.sleep(6)
             pauseWatchDog = False
 
     def __comm_status(self, toUser):
@@ -108,9 +110,9 @@ class ScarcellaBotCommands(telepot.Bot):
                 notifiche="ACCESE"
             else:
                 notifiche= "SPENTE"
-            statusMinutes = ((datetime.now()-startTime).total_seconds()) // 60
+            statusMinutes = ((datetime.now()-startTime).total_seconds()) / 60 / 60
             bot.sendMessage(toUser, "Ciao {2}. Tutto ok.\n"
-                                    "Sono in allerta da {0} minuti!\n"
+                                    "Sono in allerta da {0:0,.1f} ore!\n"
                                     "Le tue notifiche push sono {1}!".format(statusMinutes, notifiche, user['name']))
             print('Message sent!')
         except:
