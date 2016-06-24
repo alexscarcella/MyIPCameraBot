@@ -47,6 +47,8 @@ camera01['port'] = '80'
 camera01['user'] = 'user'
 camera01['pwd'] = 'pwd'
 camera01['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+camera01['url_motion_detection_off'] = ﻿'/setSystemMotion?﻿ReplySuccessPage=motion.htm&ReplyErrorPage=motion.htm&MotionDetectionEnable=0&MotionDetectionScheduleDay=62&ConfigSystemMotion=Save'
+camera01['url_motion_detection_on'] = '/setSystemMotion?﻿ReplySuccessPage=motion.htm&ReplyErrorPage=motion.htm&MotionDetectionEnable=1&MotionDetectionScheduleDay=62&MotionDetectionScheduleMode=0&MotionDetectionSensitivity=65&ConfigSystemMotion=Save'
 
 # camera 02
 camera02 = dict()
@@ -57,5 +59,7 @@ camera02['port'] = '80'
 camera02['user'] = 'user'
 camera02['pwd'] = 'pwd'
 camera02['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+camera02['url_motion_detection_off'] =  '/setSystemMotion?﻿ReplySuccessPage=motion.htm&ReplyErrorPage=motion.htm&MotionDetectionEnable=0&MotionDetectionScheduleDay=62&ConfigSystemMotion=Save'
+camera02['url_motion_detection_on'] = '/setSystemMotion?﻿ReplySuccessPage=motion.htm&ReplyErrorPage=motion.htm&MotionDetectionEnable=1&MotionDetectionScheduleDay=62&MotionDetectionScheduleMode=0&MotionDetectionSensitivity=65&ConfigSystemMotion=Save'
 
 camere = (camera01, camera02)

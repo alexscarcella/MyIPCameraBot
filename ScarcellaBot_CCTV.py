@@ -60,6 +60,10 @@ class ScarcellaBotCommands(telepot.Bot):
                 self.__comm_jpg(chat_id)
             elif msg['text'] == '/status':
                 self.__comm_status(chat_id)
+            elif msg['text'] == '/motion_off':
+                self.__comm_motion_detection_off(chat_id)
+            elif msg['text'] == '/motion_on':
+                self.__comm_motion_detection_on(chat_id)
             else:
                 bot.sendMessage(u, 'Non capisco...')
         else:
@@ -118,6 +122,29 @@ class ScarcellaBotCommands(telepot.Bot):
         except:
             print "Unable to send status message: ", sys.exc_info()[0]
 
+    def __comm_motion_detection_off(self, toUser):
+        for camera in ScarcellaBot_config.camere:
+            try:
+                url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_motion_detection_off']
+                print camera['id'] + ' --> ' + url_complete
+                r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                # if r.status_code == 200:
+                bot.sendMessage(toUser, 'Camera: {0} -- Motion detection OFF'.format(camera['id']))
+            except:
+                print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+
+
+    def __comm_motion_detection_on(self, toUser):
+        for camera in ScarcellaBot_config.camere:
+            try:
+                url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_motion_detection_on']
+                print camera['id'] + ' --> ' + url_complete
+                r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                # if r.status_code == 200:
+                bot.sendMessage(toUser, 'Camera: {0} -- Motion detection ON'.format(camera['id']))
+            except:
+                print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+
     def __getUser(self, userID):
         for usr in ScarcellaBot_config.users:
             if usr['telegram_id'] == str(userID):
@@ -132,6 +159,8 @@ if __name__ == "__main__":
     helpMessage = 'Ecco i miei comandi:\n'\
                     '/help: elenco comandi (questo!)\n'\
                     '/jpg: ti invio le immagini JPG di tutte le tue camere\n'\
+                    '/motion_on: spengo il motion detection\n'\
+                    '/motion_off: accendo il motion detection\n'\
                     '/status: ti dico come sto\n'
     try:
         bot = ScarcellaBotCommands(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
