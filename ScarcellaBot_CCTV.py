@@ -17,6 +17,7 @@ from requests.auth import HTTPBasicAuth
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from datetime import datetime
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardHide, ForceReply
 
 
 class WatchdogHandler(FileSystemEventHandler):
@@ -49,7 +50,7 @@ class ScarcellaBotCommands(telepot.Bot):
 
     # definisco il gestore che deve essere invocato nel loop del bot
     def handle(self, msg):
-        # pprint(msg)
+        print (msg)
         flavor = telepot.flavor(msg)
         if flavor == 'chat':
             content_type, chat_type, chat_id = telepot.glance(msg)
@@ -64,8 +65,16 @@ class ScarcellaBotCommands(telepot.Bot):
                 self.__comm_motion_detection_off(chat_id)
             elif msg['text'] == '/motion_on':
                 self.__comm_motion_detection_on(chat_id)
+            elif msg['text'] == '/night':
+                self.__comm_night(chat_id)
+            elif msg['text'] == 'IR Automatico':
+                self.__comm_night_IR_auto(chat_id)
+            elif msg['text'] == 'IR On':
+                self.__comm_night_IR_On(chat_id)
+            elif msg['text'] == 'IR Off':
+                self.__comm_night_IR_Off(chat_id)
             else:
-                bot.sendMessage(u, 'Non capisco...')
+                self.__comm_nonCapisco(chat_id)
         else:
             raise telepot.BadFlavor(msg)
 
@@ -133,7 +142,6 @@ class ScarcellaBotCommands(telepot.Bot):
             except:
                 print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
 
-
     def __comm_motion_detection_on(self, toUser):
         for camera in ScarcellaBot_config.camere:
             try:
@@ -144,6 +152,43 @@ class ScarcellaBotCommands(telepot.Bot):
                 bot.sendMessage(toUser, 'Camera: {0} -- Motion detection ON'.format(camera['id']))
             except:
                 print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+
+    def __comm_night(self, toUser):
+        try:
+            show_keyboarc = {'IR_keyboard': [['IR Automatico'], ['IR On', 'IR Off']]}
+            bot.sendMessage(toUser, "Scegli la modalita' notturna:", reply_markup=show_keyboarc)
+        except:
+            print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+
+    def __comm_night_IR_auto(self, toUser):
+        try:
+            for camera in ScarcellaBot_config.camere:
+                try:
+                    url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_night_mode_auto']
+                    print camera['id'] + ' --> ' + url_complete
+                    r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                    if r.status_code == 200:
+                        bot.sendMessage(toUser, 'Camera: {0} -- Infrared AUTO'.format(camera['id']))
+                    else:
+                        bot.sendMessage(toUser, 'Camera: {0} -- non riesco a comunicare con la camera!!'.format(camera['id']))
+                except:
+                    print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+            hide_keyboard = ReplyKeyboardHide()
+            bot.sendMessage(toUser, 'OK!', reply_markup=hide_keyboard)
+        except:
+            print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+
+    def __comm_night_IR_On(self, toUser):
+        return None
+
+    def __comm_night_IR_Off(self, toUser):
+        return None
+
+    def __comm_nonCapisco(self, toUser):
+        try:
+            bot.sendMessage(toUser, "Non capisco...")
+        except:
+            print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
 
     def __getUser(self, userID):
         for usr in ScarcellaBot_config.users:
