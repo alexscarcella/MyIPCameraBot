@@ -14,6 +14,9 @@ Personalmente uso questo semplice script con il sistema di videosorveglianza cas
 
 - `/help`: elenco comandi (questo!)
 - `/jpg`: ti invio le immagini JPG di tutte le camere
+- `/motion_on`: spengo il motion detection
+- `/motion_off`: accendo il motion detection
+- `/night`: imposto la modalita' nottuna (infrarosso)
 - `/status`: ti dico come sto
 
 TODO:
@@ -78,6 +81,11 @@ camera01['port'] = '80'
 camera01['user'] = 'user'
 camera01['pwd'] = 'pwd'
 camera01['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+camera01['url_motion_detection_off'] = '/setSystemMotion?﻿ReplySuccessPage=motion.htm&ReplyErrorPage=motion.htm&MotionDetectionEnable=0&MotionDetectionScheduleDay=62&ConfigSystemMotion=Save'
+camera01['url_motion_detection_on'] = '/setSystemMotion?﻿ReplySuccessPage=motion.htm&ReplyErrorPage=motion.htm&MotionDetectionEnable=1&MotionDetectionScheduleDay=62&MotionDetectionScheduleMode=0&MotionDetectionSensitivity=65&ConfigSystemMotion=Save'
+camera01['url_night_mode_auto'] = '/setDayNightMode?ReplySuccessPage=night.htm&ReplyErrorPage=errrnght.htm&LightSensorControl=3&DayNightMode=0&ConfigDayNightMode=Save'
+camera01['url_night_mode_off'] = '/setDayNightMode?ReplySuccessPage=night.htm&ReplyErrorPage=errrnght.htm&LightSensorControl=3&DayNightMode=2&ConfigDayNightMode=Save'
+camera01['url_night_mode_on'] = '/setDayNightMode?ReplySuccessPage=night.htm&ReplyErrorPage=errrnght.htm&LightSensorControl=3&DayNightMode=3&ConfigDayNightMode=Save'
 
 # camera 02
 camera02 = dict()
@@ -88,6 +96,11 @@ camera02['port'] = '80'
 camera02['user'] = 'user'
 camera02['pwd'] = 'pwd'
 camera02['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+camera02['url_motion_detection_off'] = '/setSystemMotion?﻿ReplySuccessPage=motion.htm&ReplyErrorPage=motion.htm&MotionDetectionEnable=0&MotionDetectionScheduleDay=62&ConfigSystemMotion=Save'
+camera02['url_motion_detection_on'] =  '/setSystemMotion?﻿ReplySuccessPage=motion.htm&ReplyErrorPage=motion.htm&MotionDetectionEnable=1&MotionDetectionScheduleDay=62&MotionDetectionScheduleMode=0&MotionDetectionSensitivity=65&ConfigSystemMotion=Save'
+camera02['url_night_mode_auto'] = '/setDayNightMode?ReplySuccessPage=night.htm&ReplyErrorPage=errrnght.htm&LightSensorControl=3&DayNightMode=0&ConfigDayNightMode=Save'
+camera02['url_night_mode_off'] = '/setDayNightMode?ReplySuccessPage=night.htm&ReplyErrorPage=errrnght.htm&LightSensorControl=3&DayNightMode=2&ConfigDayNightMode=Save'
+camera02['url_night_mode_on'] = '/setDayNightMode?ReplySuccessPage=night.htm&ReplyErrorPage=errrnght.htm&LightSensorControl=3&DayNightMode=3&ConfigDayNightMode=Save'
 
 camere = (camera01, camera02)
 ```

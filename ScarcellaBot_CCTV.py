@@ -155,13 +155,17 @@ class ScarcellaBotCommands(telepot.Bot):
 
     def __comm_night(self, toUser):
         try:
-            show_keyboarc = {'IR_keyboard': [['IR Automatico'], ['IR On', 'IR Off']]}
-            bot.sendMessage(toUser, "Scegli la modalita' notturna:", reply_markup=show_keyboarc)
+            show_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='IR Automatico')],
+                                                          [KeyboardButton(text='IR On'), KeyboardButton(text='IR Off')],
+                                                          ])
+            bot.sendMessage(toUser, "Scegli la modalita' notturna:", reply_markup=show_keyboard)
         except:
             print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
 
     def __comm_night_IR_auto(self, toUser):
         try:
+            hide_keyboard = ReplyKeyboardHide()
+            bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
             for camera in ScarcellaBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_night_mode_auto']
@@ -173,16 +177,47 @@ class ScarcellaBotCommands(telepot.Bot):
                         bot.sendMessage(toUser, 'Camera: {0} -- non riesco a comunicare con la camera!!'.format(camera['id']))
                 except:
                     print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
-            hide_keyboard = ReplyKeyboardHide()
-            bot.sendMessage(toUser, 'OK!', reply_markup=hide_keyboard)
+            self.__comm_jpg(toUser)
         except:
             print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
 
     def __comm_night_IR_On(self, toUser):
-        return None
+        try:
+            hide_keyboard = ReplyKeyboardHide()
+            bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
+            for camera in ScarcellaBot_config.camere:
+                try:
+                    url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_night_mode_on']
+                    print camera['id'] + ' --> ' + url_complete
+                    r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                    if r.status_code == 200:
+                        bot.sendMessage(toUser, 'Camera: {0} -- Infrared AUTO'.format(camera['id']))
+                    else:
+                        bot.sendMessage(toUser, 'Camera: {0} -- non riesco a comunicare con la camera!!'.format(camera['id']))
+                except:
+                    print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+
+        except:
+            print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
 
     def __comm_night_IR_Off(self, toUser):
-        return None
+        try:
+            hide_keyboard = ReplyKeyboardHide()
+            bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
+            for camera in ScarcellaBot_config.camere:
+                try:
+                    url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_night_mode_off']
+                    print camera['id'] + ' --> ' + url_complete
+                    r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                    if r.status_code == 200:
+                        bot.sendMessage(toUser, 'Camera: {0} -- Infrared AUTO'.format(camera['id']))
+                    else:
+                        bot.sendMessage(toUser, 'Camera: {0} -- non riesco a comunicare con la camera!!'.format(camera['id']))
+                except:
+                    print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+
+        except:
+            print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
 
     def __comm_nonCapisco(self, toUser):
         try:
@@ -206,6 +241,7 @@ if __name__ == "__main__":
                     '/jpg: ti invio le immagini JPG di tutte le tue camere\n'\
                     '/motion_on: spengo il motion detection\n'\
                     '/motion_off: accendo il motion detection\n'\
+                    "/night: imposto la modalita' nottuna (infrarosso)\n"\
                     '/status: ti dico come sto\n'
     try:
         bot = ScarcellaBotCommands(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
