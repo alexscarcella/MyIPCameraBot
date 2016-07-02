@@ -61,9 +61,11 @@ class ScarcellaBotCommands(telepot.Bot):
                 self.__comm_jpg(chat_id)
             elif msg['text'] == '/status':
                 self.__comm_status(chat_id)
-            elif msg['text'] == '/motion_off':
+            elif msg['text'] == '/motion':
+                self.__comm_motion(chat_id)
+            elif msg['text'] == 'Motion Detection ON':
                 self.__comm_motion_detection_off(chat_id)
-            elif msg['text'] == '/motion_on':
+            elif msg['text'] == 'Motion Detection OFF':
                 self.__comm_motion_detection_on(chat_id)
             elif msg['text'] == '/night':
                 self.__comm_night(chat_id)
@@ -131,27 +133,46 @@ class ScarcellaBotCommands(telepot.Bot):
         except:
             print "Unable to send status message: ", sys.exc_info()[0]
 
+    def __comm_motion(self, toUser):
+        try:
+            show_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='Motion Detection ON'),
+                                                           KeyboardButton(text='Motion Detection OFF')],
+                                                          ])
+            bot.sendMessage(toUser, "Imposta il motion detection:", reply_markup=show_keyboard)
+        except:
+            print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+
     def __comm_motion_detection_off(self, toUser):
-        for camera in ScarcellaBot_config.camere:
-            try:
-                url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_motion_detection_off']
-                print camera['id'] + ' --> ' + url_complete
-                r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
-                # if r.status_code == 200:
-                bot.sendMessage(toUser, 'Camera: {0} -- Motion detection OFF'.format(camera['id']))
-            except:
-                print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+        try:
+            hide_keyboard = ReplyKeyboardHide()
+            bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
+            for camera in ScarcellaBot_config.camere:
+                try:
+                    url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_motion_detection_off']
+                    print camera['id'] + ' --> ' + url_complete
+                    r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                    # if r.status_code == 200:
+                    bot.sendMessage(toUser, 'Camera: {0} -- Motion detection OFF'.format(camera['id']))
+                except:
+                    print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+        except:
+            print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
 
     def __comm_motion_detection_on(self, toUser):
-        for camera in ScarcellaBot_config.camere:
-            try:
-                url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_motion_detection_on']
-                print camera['id'] + ' --> ' + url_complete
-                r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
-                # if r.status_code == 200:
-                bot.sendMessage(toUser, 'Camera: {0} -- Motion detection ON'.format(camera['id']))
-            except:
-                print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+        try:
+            hide_keyboard = ReplyKeyboardHide()
+            bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
+            for camera in ScarcellaBot_config.camere:
+                try:
+                    url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_motion_detection_on']
+                    print camera['id'] + ' --> ' + url_complete
+                    r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                    # if r.status_code == 200:
+                    bot.sendMessage(toUser, 'Camera: {0} -- Motion detection ON'.format(camera['id']))
+                except:
+                    print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
+        except:
+            print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
 
     def __comm_night(self, toUser):
         try:
@@ -191,7 +212,7 @@ class ScarcellaBotCommands(telepot.Bot):
                     print camera['id'] + ' --> ' + url_complete
                     r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
                     if r.status_code == 200:
-                        bot.sendMessage(toUser, 'Camera: {0} -- Infrared AUTO'.format(camera['id']))
+                        bot.sendMessage(toUser, 'Camera: {0} -- Infrared ON'.format(camera['id']))
                     else:
                         bot.sendMessage(toUser, 'Camera: {0} -- non riesco a comunicare con la camera!!'.format(camera['id']))
                 except:
@@ -210,7 +231,7 @@ class ScarcellaBotCommands(telepot.Bot):
                     print camera['id'] + ' --> ' + url_complete
                     r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
                     if r.status_code == 200:
-                        bot.sendMessage(toUser, 'Camera: {0} -- Infrared AUTO'.format(camera['id']))
+                        bot.sendMessage(toUser, 'Camera: {0} -- Infrared OFF'.format(camera['id']))
                     else:
                         bot.sendMessage(toUser, 'Camera: {0} -- non riesco a comunicare con la camera!!'.format(camera['id']))
                 except:
@@ -239,8 +260,7 @@ if __name__ == "__main__":
     helpMessage = 'Ecco i miei comandi:\n'\
                     '/help: elenco comandi (questo!)\n'\
                     '/jpg: ti invio le immagini JPG di tutte le tue camere\n'\
-                    '/motion_on: spengo il motion detection\n'\
-                    '/motion_off: accendo il motion detection\n'\
+                    '/motion: imposto il motion detection\n'\
                     "/night: imposto la modalita' nottuna (infrarosso)\n"\
                     '/status: ti dico come sto\n'
     try:
