@@ -1,14 +1,14 @@
 # ScarcellaBot_CCTV
 
-Si tratta di un semplice gestore per un **[BOT di Telegram](https://core.telegram.org/bots)** che preleva immagini _.jpg_ da una cartella sul file system locale e le invia ad uno o più account Telegram.
+Si tratta di un semplice gestore per un **[BOT di Telegram](https://core.telegram.org/bots)** che interagisce con le camere IP (ad esempio quelle di un sistema di videosorveglianza casalingo) e preleva le loro immagini _.jpg_ da una cartella sul file system locale inviandole quindi ad uno o più account Telegram.
 Le immagini vengono spedite in chat man mano che vengono create sul file system: il modulo `whatchdog` è infatti in ascolto su una cartella locale. Mentre il modulo `telepot` si occupa di gestire il BOT.
+In questo modo è possibile farsi spedire le immagini di una camera, magari acquisita a valle di un movimento o di un rumore, direttamente su una chat dedicata su Telegram.
 
 Potete scaricare l'ultima release dello script [da qui](https://github.com/alexscarcella/ScarcellaBot_CCTV/releases).
 
 ![alt text](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBot_CCTV.png?raw=true "un esempio di architettura per l'utilizzo dello script")
 
-Personalmente uso questo semplice script con il sistema di videosorveglianza casalingo: ogni camera IP è in grado di inviare snapshot _.jpg_ su un server FTP o su una cartella condivisa nella rete locale. In questo modo è possibile farsi spedire le immagini di una camera, magari acquisita a valle di un movimento o di un rumore, direttamente su una chat dedicata su Telegram.
-
+In questo modo è possibile farsi spedire le immagini di una camera, magari acquisita a valle di un movimento o di un rumore, direttamente su una chat dedicata su Telegram.
 
 ## Comandi del bot
 
@@ -17,10 +17,6 @@ Personalmente uso questo semplice script con il sistema di videosorveglianza cas
 - `/motion`: imposto il motion detection
 - `/night`: imposto la modalita' nottuna (infrarosso)
 - `/status`: ti dico come sto
-
-TODO:
-con il tempo mi piacerebbe implementare un set completo di comandi per spegnere ed accendere le camere, inviarmi immagini o spezzoni video a richiesta o cambiare alcuni parametri di funzionamento.
-
 
 ## ScarcellaBot_config.py
 
