@@ -14,8 +14,7 @@ Personalmente uso questo semplice script con il sistema di videosorveglianza cas
 
 - `/help`: elenco comandi (questo!)
 - `/jpg`: ti invio le immagini JPG di tutte le camere
-- `/motion_on`: spengo il motion detection
-- `/motion_off`: accendo il motion detection
+- `/motion`: imposto il motion detection
 - `/night`: imposto la modalita' nottuna (infrarosso)
 - `/status`: ti dico come sto
 

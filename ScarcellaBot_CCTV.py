@@ -63,9 +63,9 @@ class ScarcellaBotCommands(telepot.Bot):
                 self.__comm_status(chat_id)
             elif msg['text'] == '/motion':
                 self.__comm_motion(chat_id)
-            elif msg['text'] == 'Motion Detection ON':
-                self.__comm_motion_detection_off(chat_id)
             elif msg['text'] == 'Motion Detection OFF':
+                self.__comm_motion_detection_off(chat_id)
+            elif msg['text'] == 'Motion Detection ON':
                 self.__comm_motion_detection_on(chat_id)
             elif msg['text'] == '/night':
                 self.__comm_night(chat_id)
