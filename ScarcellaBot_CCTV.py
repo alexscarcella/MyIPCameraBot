@@ -57,6 +57,8 @@ class ScarcellaBotCommands(telepot.Bot):
             print ("Chat message: ", content_type, chat_type, chat_id, msg['text'])
             if msg['text'] == '/help':
                 self.__comm_help(chat_id)
+            elif msg['text'] == '/start':
+                self.__comm_help(chat_id)
             elif msg['text'] == '/jpg':
                 self.__comm_jpg(chat_id)
             elif msg['text'] == '/status':
