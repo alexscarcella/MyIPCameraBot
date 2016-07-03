@@ -28,6 +28,7 @@ Il file è diviso in tre differenti sezioni:
 - **CHAT USER**: qui vengono definiti gli utenti con cui il Bot è abilitato ad interagire. Al momento, e vista la natura dell'applicazione, non è prevista una procedura di sottoscrizione.
 - **CAMERE CONFIGURATION**: qui sono definite le camere con i loro parametri per al raggiungibilità nella rete locale. La cosa importante è conoscere le URL di configurazione di ogni vostro modello di camera. In genere tutte le camere IP prevedono delle API va HTTP (oppure sniffate il traccifo, come ho fatto io, e ricavate i parametri in POST).
 
+Sia gli utenti che le camere sono definiti attraverso un Dictionary di Python: ricordatevi quindi di aggiungerli rispettivamente alle variabili `users` e `camere`.
 Ad esempio:
 
 ```
