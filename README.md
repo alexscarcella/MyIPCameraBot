@@ -6,7 +6,7 @@ In questo modo è possibile farsi spedire le immagini di una camera, magari acqu
 
 Potete scaricare l'ultima release dello script [da qui](https://github.com/alexscarcella/ScarcellaBot_CCTV/releases).
 
-![alt text](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBot_CCTV.png?raw=true "un esempio di architettura per l'utilizzo dello script")
+![un esempio di architettura per l'utilizzo dello script](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBot_CCTV.png?raw=true "un esempio di architettura per l'utilizzo dello script")
 
 In questo modo è possibile farsi spedire le immagini di una camera, magari acquisita a valle di un movimento o di un rumore, direttamente su una chat dedicata su Telegram.
 
@@ -17,6 +17,25 @@ In questo modo è possibile farsi spedire le immagini di una camera, magari acqu
 - `/motion`: imposto il motion detection
 - `/night`: imposto la modalita' nottuna (infrarosso)
 - `/status`: ti dico come sto
+
+![alt text](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBOT%20-%20screeshot%20-%2000001.PNG?raw=true =250x "un esempio di architettura per l'utilizzo dello script")
+
+
+## Dipendenze
+
+Per far funzionare correttamente lo script del [bot](https://core.telegram.org/bots) è necessario installare alcuni moduli Python aggiuntivi:
+- [telepot](https://github.com/nickoala/telepot): Python framework for Telegram Bot API
+- [watchdog](https://pypi.python.org/pypi/watchdog): Filesystem events monitoring. Python API and shell utilities to monitor file system events.
+- [requests](http://requests.readthedocs.io/en/master/): Non-GMO HTTP library for Python, safe for human consumption.
+Potete installare i moduli usando [pip](https://pypi.python.org/pypi/pip).
+
+`$ sudo pip install watchdog`
+
+`$ sudo pip install telepot`
+
+`$ sudo pip install requests`
+
+Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).
 
 ## ScarcellaBot_config.py
 
@@ -31,7 +50,7 @@ Il file è diviso in tre differenti sezioni:
 Sia gli utenti che le camere sono definiti attraverso un Dictionary di Python: ricordatevi quindi di aggiungerli rispettivamente alle variabili `users` e `camere`.
 Ad esempio:
 
-```
+```python
 # fil#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
@@ -108,18 +127,3 @@ camere = (camera01, camera02)
 
 E' possibile usare come modello il file `ScarcellaBot_config.example` (da editare e rinominare).
 
-## Dipendenze
-
-Per far funzionare correttamente lo script del [bot](https://core.telegram.org/bots) è necessario installare alcuni moduli Python aggiuntivi:
-- [telepot](https://github.com/nickoala/telepot): Python framework for Telegram Bot API
-- [watchdog](https://pypi.python.org/pypi/watchdog): Filesystem events monitoring. Python API and shell utilities to monitor file system events.
-- [requests](http://requests.readthedocs.io/en/master/): Non-GMO HTTP library for Python, safe for human consumption.
-Potete installare i moduli usando [pip](https://pypi.python.org/pypi/pip).
-
-`$ sudo pip install watchdog`
-
-`$ sudo pip install telepot`
-
-`$ sudo pip install requests`
-
-Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).
