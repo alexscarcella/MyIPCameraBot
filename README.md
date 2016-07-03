@@ -23,7 +23,11 @@ In questo modo è possibile farsi spedire le immagini di una camera, magari acqu
 E' necessario creare il file di configurazione `ScarcellaBot_config.py` da mettere nella stessa cartella dello script python. Potete editare e rinominare il file di esempio `ScarcellaBot_config.example`:
 si tratta ancora di un files di configurazione grossolano (di fatto è un file python, quindi attenti alla sintassi).
 
-Il file definisce i valori di alcuni parametri (alcuni dei quali è meglio tenere segreti!).
+Il file è diviso in tre differenti sezioni:
+- **BASIC CONFIGURATION**: qui ci sono i valori di configurazione base dello script. Tra cui il Token segreto di Telegram, o la cartella sul file system locale da cui prelevare le immagini.
+- **CHAT USER**: qui vengono definiti gli utenti con cui il Bot è abilitato ad interagire. Al momento, e vista la natura dell'applicazione, non è prevista una procedura di sottoscrizione.
+- **CAMERE CONFIGURATION**: qui sono definite le camere con i loro parametri per al raggiungibilità nella rete locale. La cosa importante è conoscere le URL di configurazione di ogni vostro modello di camera. In genere tutte le camere IP prevedono delle API va HTTP (oppure sniffate il traccifo, come ho fatto io, e ricavate i parametri in POST).
+
 Ad esempio:
 
 ```
@@ -41,10 +45,10 @@ TELEGRAM_BOT_TOKEN = "fffffffffffffffffffffffffffffffffff"
 IMAGES_PATH = "/Volumes/images/cctv"
 
 # l'intervallo di tempo minimo (in secondi) che deve trascorrere da un messagio ed il successivo
-SEND_SECONDS = 60
+SEND_SECONDS = 5
 
 # tempo necessario all'invio delle immagini di tutte le camere prima del time-out
-SEND_ONDEMAND_TIMOUT = 18
+SEND_ONDEMAND_TIMOUT = 8
 
 # -----------------------------------------------------------------------------
 # ------------------- CHAT USERS ----------------------------------------------
