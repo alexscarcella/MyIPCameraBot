@@ -18,7 +18,9 @@ In questo modo è possibile farsi spedire le immagini di una camera, magari acqu
 - `/night`: imposto la modalita' nottuna (infrarosso)
 - `/status`: ti dico come sto
 
-![alt text](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBOT%20-%20screeshot%20-%2000002.PNG?raw=true "un esempio di architettura per l'utilizzo dello script")
+![alt text](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBOT%20-%20screeshot%20-%2000002.PNG?raw=true)
+![alt text](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBOT%20-%20screeshot%20-%2000003.PNG?raw=true)
+![alt text](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBOT%20-%20screeshot%20-%2000004.PNG?raw=true)
 
 
 ## Dipendenze
