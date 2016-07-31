@@ -100,3 +100,4 @@ ENV/
 .idea/workspace.xml
 /ScarcellaBot_camere.py
 /copyToRaspberry.sh
+/ScarcellaBot.service

@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
 """
 Devi editare il file di configurazione ScarcellaBot_config.py
 Puoi fare riferimento al file di esempio ScarcellaBot_config.example
@@ -96,10 +97,11 @@ class ScarcellaBotCommands(telepot.Bot):
             for camera in ScarcellaBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_send_jpg_to_folder']
+                    headers = {'Referer': camera['referer_send_jpg_to_folder']}
                     print camera['id'] + ' --> ' + url_complete
-                    r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                    r = requests.get(url_complete, headers=headers, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                    print(str(datetime.now()), 'HTTP Status: {0}'.format(r.status_code))
                     if r.status_code == 200:
-                        print(str(datetime.now()), 'HTTP Status: {0}'.format(r.status_code))
                         time.sleep(6)
                         last_jpg = max(glob.iglob(ScarcellaBot_config.IMAGES_PATH + '/*.jpg'), key=os.path.getctime)
                         try:
@@ -112,6 +114,8 @@ class ScarcellaBotCommands(telepot.Bot):
                             print str(datetime.now()), "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
                         finally:
                             f.close()
+                    else:
+                        bot.sendMessage(toUser, 'oops! Camera ' + camera['id'] + ': unable to get image!')
                 except:
                     print "Unable to get image: ", sys.exc_info()[0]
         except:
