@@ -198,8 +198,9 @@ class ScarcellaBotCommands(telepot.Bot):
             for camera in ScarcellaBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_night_mode_auto']
+                    headers = {'Referer': 'http://' + camera['ip'] + ":" + camera['port']}
                     print camera['id'] + ' --> ' + url_complete
-                    r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                    r = requests.get(url_complete, headers=headers, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
                     if r.status_code == 200:
                         bot.sendMessage(toUser, 'Camera: {0} -- Infrared AUTO'.format(camera['id']))
                     else:
@@ -217,8 +218,9 @@ class ScarcellaBotCommands(telepot.Bot):
             for camera in ScarcellaBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_night_mode_on']
+                    headers = {'Referer': 'http://' + camera['ip'] + ":" + camera['port']}
                     print camera['id'] + ' --> ' + url_complete
-                    r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                    r = requests.get(url_complete, headers=headers, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
                     if r.status_code == 200:
                         bot.sendMessage(toUser, 'Camera: {0} -- Infrared ON'.format(camera['id']))
                     else:
@@ -236,8 +238,9 @@ class ScarcellaBotCommands(telepot.Bot):
             for camera in ScarcellaBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_night_mode_off']
+                    headers = {'Referer': 'http://' + camera['ip'] + ":" + camera['port']}
                     print camera['id'] + ' --> ' + url_complete
-                    r = requests.get(url_complete, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
+                    r = requests.get(url_complete, headers=headers, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
                     if r.status_code == 200:
                         bot.sendMessage(toUser, 'Camera: {0} -- Infrared OFF'.format(camera['id']))
                     else:
