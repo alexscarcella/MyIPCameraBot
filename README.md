@@ -129,3 +129,37 @@ camere = (camera01, camera02)
 
 E' possibile usare come modello il file `ScarcellaBot_config.example` (da editare e rinominare).
 
+## Servizio
+
+Se volete far girare ScarcellaBot_CCTV come un servizio in background potete creare un file UNIT. Seguite le seguenti istruzioni:
+
+Create il nuovo file `ScarcellaBOT_CCTV.service` nella cartella `/lib/systemd/system/` (potete usare l'editor nano)
+Inserite le seguenti righe:
+
+```
+[Unit]
+Description=ScarcellaBot CCTV Service
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python /home/pi/Documents/ScarcellaBot/ScarcellaBot_CCTV.py # sostituite con il percorso corretto
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Sostituite il percorso dello script python dell'esempio in alto con il percorso corretto
+Salvate il file, chiudete l'editor di testo. Assegnate i necessari diritti di esecuzione al file tramite il comando:
+
+```
+sudo chmod 644 /lib/systemd/system/ScarcellaBOT_CCTV.service
+```
+
+Per far partire il servizio al boot digitate:
+
+```
+sudo systemctl daemon-reload
+sudo systemctl enable ScarcellaBOT_CCTV.service
+sudo reboot
+```
