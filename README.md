@@ -111,7 +111,7 @@ camera01['url_night_mode_on'] = '/setDayNightMode?ReplySuccessPage=night.htm&Rep
 
 # camera 02
 camera02 = dict()
-camera02['id'] = 'sala'
+camera02['id'] = 'garage'
 camera02['model'] = 'D-Link DCS-932LB'
 camera02['ip'] = '127.0.0.3'
 camera02['port'] = '80'
@@ -156,10 +156,17 @@ Salvate il file, chiudete l'editor di testo. Assegnate i necessari diritti di es
 sudo chmod 644 /lib/systemd/system/ScarcellaBOT_CCTV.service
 ```
 
-Per far partire il servizio al boot digitate:
+Per far partire il servizio al boot digitate (è sufficiente una sola volta):
 
 ```
 sudo systemctl daemon-reload
 sudo systemctl enable ScarcellaBOT_CCTV.service
 sudo reboot
 ```
+
+Qualche comando utile per gestire il servizio (si faccia eventualmente riferimento alla documentazione della vostra distro Linux):
+
+check status: `sudo systemctl list-units -t service | grep Scarcella`
+start `sudo systemctl start ScarcellaBOT_CCTV.service`
+stop `sudo systemctl stop ScarcellaBOT_CCTV.service`
+reload config: `sudo systemctl reload ScarcellaBOT_CCTV.service`
