@@ -129,7 +129,7 @@ camere = (camera01, camera02)
 
 E' possibile usare come modello il file `ScarcellaBot_config.example` (da editare e rinominare).
 
-## Servizio
+## Configurazione come servizio
 
 Se volete far girare ScarcellaBot_CCTV come un servizio in background potete creare un file UNIT. Seguite le seguenti istruzioni:
 
@@ -167,8 +167,8 @@ sudo reboot
 Qualche comando utile per gestire il servizio (si faccia eventualmente riferimento alla documentazione della vostra distro Linux):
 
 
-check status: `sudo systemctl list-units -t service | grep Scarcella`
-start `sudo systemctl start ScarcellaBOT_CCTV.service`
-stop `sudo systemctl stop ScarcellaBOT_CCTV.service`
-reload config: `sudo systemctl reload ScarcellaBOT_CCTV.service`
+* check status: `sudo systemctl list-units -t service | grep Scarcella`
+* start `sudo systemctl start ScarcellaBOT_CCTV.service`
+* stop `sudo systemctl stop ScarcellaBOT_CCTV.service`
+* reload config: `sudo systemctl reload ScarcellaBOT_CCTV.service`
 
