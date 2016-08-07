@@ -166,7 +166,9 @@ sudo reboot
 
 Qualche comando utile per gestire il servizio (si faccia eventualmente riferimento alla documentazione della vostra distro Linux):
 
+
 check status: `sudo systemctl list-units -t service | grep Scarcella`
 start `sudo systemctl start ScarcellaBOT_CCTV.service`
 stop `sudo systemctl stop ScarcellaBOT_CCTV.service`
 reload config: `sudo systemctl reload ScarcellaBOT_CCTV.service`
+
