@@ -60,10 +60,12 @@ class ScarcellaBotCommands(telepot.Bot):
             # verifico se l'utente da cui ho ricevuto il comando è censito
             user_exist = False
             for u in ScarcellaBot_config.users:
-                if u['telegram_id'] == chat_id:
+                if u['telegram_id'] == str(chat_id):
                     user_exist = True
+                    print ("User exist...")
             # se l'utente non è censito, abortisco
             if user_exist == False:
+                print ("User NOT exist!!!")
                 return None
             # seleziono il tipo di comando da elaborare
             if msg['text'] == '/help':
