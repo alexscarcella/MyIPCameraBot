@@ -102,3 +102,4 @@ ENV/
 /copyToRaspberry.sh
 /ScarcellaBot.service
 /ScarcellaBot_config.py
+/.gitignore
