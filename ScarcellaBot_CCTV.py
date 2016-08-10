@@ -48,7 +48,6 @@ class WatchdogHandler(FileSystemEventHandler):
                       "after the last transmission ({1})".format(ScarcellaBot_config.SEND_SECONDS, lastMessage))
 
 class ScarcellaBotCommands(telepot.Bot):
-
     # definisco il gestore che deve essere invocato nel loop del bot
     def handle(self, msg):
         print (msg)
@@ -56,7 +55,6 @@ class ScarcellaBotCommands(telepot.Bot):
         if flavor == 'chat':
             content_type, chat_type, chat_id = telepot.glance(msg)
             print ("Chat message: ", content_type, chat_type, chat_id, msg['text'])
-
             # verifico se l'utente da cui ho ricevuto il comando è censito
             user_exist = False
             for u in ScarcellaBot_config.users:
