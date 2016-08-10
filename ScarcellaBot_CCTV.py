@@ -62,6 +62,8 @@ class ScarcellaBotCommands(telepot.Bot):
                     user_exist = True
                     print ("User exist...")
             # se l'utente non è censito, abortisco
+            # questo controllo è per evitare che le risposte dei messaggi
+            # vadano a richiedenti non abilitati
             if user_exist == False:
                 print ("User NOT exist!!!")
                 return None
@@ -102,6 +104,11 @@ class ScarcellaBotCommands(telepot.Bot):
 
     def __comm_jpg(self, toUser):
         try:
+            # definisco la variabile globale 'pauseWatchDog' che
+            # serve per gestire una pausa nell'invio dei messaggi
+            # E' possibile infatti impostare che tra un messaggio ed il successivo
+            # debbano trascorrere almeno un TOT di secondi. Durante questo intervallo
+            # di tempo pauseWatchDog è impostato a 'True'
             global pauseWatchDog
             pauseWatchDog = True
             for camera in ScarcellaBot_config.camere:
@@ -275,7 +282,10 @@ class ScarcellaBotCommands(telepot.Bot):
 
 if __name__ == "__main__":
     startTime = datetime.now()
-    lastMessage = datetime.now()  # datetime dell'ultimo messaggio inviato
+    # datetime dell'ultimo messaggio inviato:
+    # E' possibile infatti impostare che tra un messaggio ed il successivo
+    # debbano trascorrere almeno un TOT di secondi
+    lastMessage = datetime.now()
     pauseWatchDog = False
     # ------ TELEGRAM --------------
     helpMessage = 'Ecco i miei comandi:\n'\
@@ -291,6 +301,7 @@ if __name__ == "__main__":
         print "Impossibile inizializzare il BOT: ", sys.exc_info()[0]
         exit()
     try:
+        # invio un messaggio di benvenuto agli utenti censiti nel file di configurazione
         for u in ScarcellaBot_config.users:
             print('Welcome...', u)
             welcome = 'Adesso sono attivo!\n\n' \
@@ -318,5 +329,4 @@ if __name__ == "__main__":
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
-        # bot.sendMessage(u, 'Stop!! - ')
     observer.join()
