@@ -128,7 +128,7 @@ camere = (camera01, camera02)
 ```
 
 E' possibile usare come modello il file `ScarcellaBot_config.example` (da editare e rinominare).
-Nel caso in cui si volesse inviare i messaggi ad un solo utente, è possibile configurare la sezione `users` nel seguente modo (il dictionary `users` deve avere almeno due elementi):
+Nel caso in cui si volesse inviare i messaggi ad un solo utente, è possibile configurare la sezione `users` nel seguente modo:
 
 ```
 # user 01
@@ -139,6 +139,8 @@ user01['push'] = True
 
 users = (user01, None)
 ```
+
+Il dictionary `users` deve avere almeno due elementi, per cui è necessario inserire un utente fittizio nullo (`None`).
 
 ## Configurazione come servizio
 
