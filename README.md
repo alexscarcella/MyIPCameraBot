@@ -128,6 +128,17 @@ camere = (camera01, camera02)
 ```
 
 E' possibile usare come modello il file `ScarcellaBot_config.example` (da editare e rinominare).
+Nel caso in cui si volesse inviare i messaggi ad un solo utente, è possibile configurare la sezione `users` nel seguente modo (il dictionary `users` deve avere almeno due elementi):
+
+```
+# user 01
+user01 = dict()
+user01['name'] = 'Mario'
+user01['telegram_id'] = '111111111'
+user01['push'] = True
+
+users = (user01, None)
+```
 
 ## Configurazione come servizio
 
