@@ -20,34 +20,8 @@ from watchdog.events import FileSystemEventHandler
 from datetime import datetime
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardHide, ForceReply
 
-
-class WatchdogHandler(FileSystemEventHandler):
-    def on_created(self, event):
-        if pauseWatchDog is True:
-            print str(datetime.now()), "Message not send. Whatchdog paused."
-            return
-        print "New file: " + event.src_path
-        global lastMessage
-        if os.path.splitext(event.src_path)[1] != ".jpg":
-            print("The file is not a .jpg")
-            return None  # no image .jpg
-        for u in ScarcellaBot_config.users:
-            if u['push'] is True and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS:
-                try:
-                    f = open(event.src_path, 'rb')
-                    print(str(datetime.now()), 'Sending the message to ', u)
-                    bot.sendPhoto(u['telegram_id'], f)
-                    lastMessage = datetime.now()
-                except:
-                    print str(datetime.now()), "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
-                finally:
-                    f.close()
-            else:
-                print(str(datetime.now()), "Message not sent. The user may be configured without sending push. "
-                      "They must spend at least {0} seconds"
-                      "after the last transmission ({1})".format(ScarcellaBot_config.SEND_SECONDS, lastMessage))
-
-class ScarcellaBotCommands(telepot.Bot):
+# ------ GESTORE DEI COMANDI DEL BOT
+class BotCommandsHandler(telepot.Bot):
     # definisco il gestore che deve essere invocato nel loop del bot
     def handle(self, msg):
         print (msg)
@@ -58,6 +32,8 @@ class ScarcellaBotCommands(telepot.Bot):
             # verifico se l'utente da cui ho ricevuto il comando è censito
             user_exist = False
             for u in ScarcellaBot_config.users:
+                if u is None:
+                    break
                 if u['telegram_id'] == str(chat_id):
                     user_exist = True
                     print ("User exist...")
@@ -104,13 +80,6 @@ class ScarcellaBotCommands(telepot.Bot):
 
     def __comm_jpg(self, toUser):
         try:
-            # definisco la variabile globale 'pauseWatchDog' che
-            # serve per gestire una pausa nell'invio dei messaggi
-            # E' possibile infatti impostare che tra un messaggio ed il successivo
-            # debbano trascorrere almeno un TOT di secondi. Durante questo intervallo
-            # di tempo pauseWatchDog è impostato a 'True'
-            global pauseWatchDog
-            pauseWatchDog = True
             for camera in ScarcellaBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_send_jpg_to_folder']
@@ -139,7 +108,6 @@ class ScarcellaBotCommands(telepot.Bot):
             print "Cameras configuration error: ", sys.exc_info()[0]
         finally:
             time.sleep(6)
-            pauseWatchDog = False
 
     def __comm_status(self, toUser):
         try:
@@ -280,29 +248,63 @@ class ScarcellaBotCommands(telepot.Bot):
                 return usr
         return None
 
+# ------ GESTORE DEL WATCHDOG
+class WatchdogHandler(FileSystemEventHandler):
+    def on_created(self, event):
+        print "New file: " + event.src_path
+        global lastMessage
+        # controllo che i nuovi files siano immagini con estensione .jpg
+        if os.path.splitext(event.src_path)[1] != ".jpg":
+            print("The file is not a .jpg")
+            return None  # no image .jpg
+        # ciclo tra gli utenti in configurazione
+        for u in ScarcellaBot_config.users:
+            # verifico che gli utenti abbiano le notifiche PUSH abilitate e che sia già
+            # trascorso il tempo minimo tra due invii successivi
+            if u['push'] is True and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS:
+                try:
+                    f = open(event.src_path, 'rb')
+                    print(str(datetime.now()), 'Sending the message to ', u)
+                    bot.sendPhoto(u['telegram_id'], f)
+                    lastMessage = datetime.now() # aggiorno il dateTime di ultima notifica
+                except:
+                    print str(datetime.now()), "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
+                finally:
+                    f.close()
+            else:
+                print(str(datetime.now()), "Message not sent. The user may be configured without sending push. "
+                      "They must spend at least {0} seconds"
+                      "after the last transmission ({1})".format(ScarcellaBot_config.SEND_SECONDS, lastMessage))
+
 if __name__ == "__main__":
+    # memorizzo il datetime dell'avvio dell'applicazione.
+    # lo uso per dare il messaggio di status, che contiene
+    # le ore di attività del server
     startTime = datetime.now()
     # datetime dell'ultimo messaggio inviato:
     # E' possibile infatti impostare che tra un messaggio ed il successivo
     # debbano trascorrere almeno un TOT di secondi
     lastMessage = datetime.now()
-    pauseWatchDog = False
     # ------ TELEGRAM --------------
-    helpMessage = 'Ecco i miei comandi:\n'\
-                    '/help: elenco comandi (questo!)\n'\
-                    '/jpg: ti invio le immagini JPG di tutte le tue camere\n'\
-                    '/motion: imposto il motion detection\n'\
-                    "/night: imposto la modalita' nottuna (infrarosso)\n"\
-                    '/status: ti dico come sto\n'
+    # inizializzo il BOT usando il TOKEN segreto dal file di configurazione
+    # ed utilizzando la classe gestore
     try:
-        bot = ScarcellaBotCommands(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
+        bot = BotCommandsHandler(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
         print("Bot:", bot.getMe())
     except:
         print "Impossibile inizializzare il BOT: ", sys.exc_info()[0]
         exit()
+    # invio un messaggio di benvenuto agli utenti censiti nel file di configurazione
     try:
-        # invio un messaggio di benvenuto agli utenti censiti nel file di configurazione
+        helpMessage = 'Ecco i miei comandi:\n' \
+                      '/help: elenco comandi (questo!)\n' \
+                      '/jpg: ti invio le immagini JPG di tutte le tue camere\n' \
+                      '/motion: imposto il motion detection\n' \
+                      "/night: imposto la modalita' nottuna (infrarosso)\n" \
+                      '/status: ti dico come sto\n'
         for u in ScarcellaBot_config.users:
+            if u is None:
+                break
             print('Welcome...', u)
             welcome = 'Adesso sono attivo!\n\n' \
                       'Posso inviarti le immagini delle camere quando rilevo un movimento. ' \
@@ -314,14 +316,17 @@ if __name__ == "__main__":
         print "Problemi nella configuazione degli utenti: ", sys.exc_info()[0]
     # ------ WATCHDOG --------------
     try:
-        path = ScarcellaBot_config.IMAGES_PATH if ScarcellaBot_config.IMAGES_PATH > 1 else '.'
-        event_handler = WatchdogHandler()
+        # leggo il path su cui abilitare il watchDog dal file di configurazione,
+        # altrimenti imposto di default il percorso in cui risiede lo script python
+        watchDogPath = ScarcellaBot_config.IMAGES_PATH if ScarcellaBot_config.IMAGES_PATH > 1 else '.'
+        # associo la classe che gestisce la logica del watchDog, gli passo il percorso
+        # sul fil system locale e spengo la recursione delle cartelle
         observer = Observer()
-        observer.schedule(event_handler, path, recursive=False)
+        observer.schedule(WatchdogHandler(), watchDogPath, recursive=False)
+        # avvio il watchdog
         observer.start()
     except:
         print "Errore del watchdog: ", sys.exc_info()[0]
-    # ------ Processo --------------
     # tengo in vita il processo fino a che
     # qualcuno non lo interrompe da tastiera
     try:
@@ -330,3 +335,9 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
+
+
+
+
+
+
