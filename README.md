@@ -1,4 +1,4 @@
-# ScarcellaBot_CCTV
+# MyIPCameraBot
 
 Si tratta di un semplice gestore per un **[BOT di Telegram](https://core.telegram.org/bots)** che interagisce con le camere IP (ad esempio quelle di un sistema di videosorveglianza casalingo) e preleva le loro immagini _.jpg_ da una cartella sul file system locale inviandole quindi ad uno o più account Telegram.
 Le immagini vengono spedite in chat man mano che vengono create sul file system: il modulo `whatchdog` è infatti in ascolto su una cartella locale. Mentre il modulo `telepot` si occupa di gestire il BOT.
@@ -26,9 +26,10 @@ In questo modo è possibile farsi spedire le immagini di una camera, magari acqu
 ## Dipendenze
 
 Per far funzionare correttamente lo script del [bot](https://core.telegram.org/bots) è necessario installare alcuni moduli Python aggiuntivi:
-- [telepot](https://github.com/nickoala/telepot): Python framework for Telegram Bot API
-- [watchdog](https://pypi.python.org/pypi/watchdog): Filesystem events monitoring. Python API and shell utilities to monitor file system events.
-- [requests](http://requests.readthedocs.io/en/master/): Non-GMO HTTP library for Python, safe for human consumption.
+- [telepot](https://github.com/nickoala/telepot): Python framework for Telegram Bot API - v10.2
+- [watchdog](https://pypi.python.org/pypi/watchdog): Filesystem events monitoring. Python API and shell utilities to monitor file system events - v0.8.3
+- [requests](http://requests.readthedocs.io/en/master/): Non-GMO HTTP library for Python, safe for human consumption - v2.12.3
+
 Potete installare i moduli usando [pip](https://pypi.python.org/pypi/pip).
 
 `$ sudo pip install watchdog`
@@ -37,11 +38,11 @@ Potete installare i moduli usando [pip](https://pypi.python.org/pypi/pip).
 
 `$ sudo pip install requests`
 
-Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).
+Se volete aggiornare i  moduli esistenti, usate il comando `sudo pip install <module> --upgrade`. Verificate comunque la compatibilità delle versioni. Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).
 
-## ScarcellaBot_config.py
+## MyIPCameraBot_config.py
 
-E' necessario creare il file di configurazione `ScarcellaBot_config.py` da mettere nella stessa cartella dello script python. Potete editare e rinominare il file di esempio `ScarcellaBot_config.example`:
+E' necessario creare il file di configurazione `MyIPCameraBot_config.py` da mettere nella stessa cartella dello script python. Potete editare e rinominare il file di esempio `MyIPCameraBot_config.example`:
 si tratta ancora di un files di configurazione grossolano (di fatto è un file python, quindi attenti alla sintassi).
 
 Il file è diviso in tre differenti sezioni:
@@ -127,7 +128,7 @@ camera02['url_night_mode_on'] = '/setDayNightMode?ReplySuccessPage=night.htm&Rep
 camere = (camera01, camera02)
 ```
 
-E' possibile usare come modello il file `ScarcellaBot_config.example` (da editare e rinominare).
+E' possibile usare come modello il file `MyIPCameraBot_config.example` (da editare e rinominare).
 Nel caso in cui si volesse inviare i messaggi ad un solo utente, è possibile configurare la sezione `users` nel seguente modo:
 
 ```
@@ -144,19 +145,19 @@ Il dictionary `users` deve avere almeno due elementi, per cui è necessario inse
 
 ## Configurazione come servizio
 
-Se volete far girare ScarcellaBot_CCTV come un servizio in background potete creare un file UNIT. Seguite le seguenti istruzioni:
+Se volete far girare MyIPCameraBot come un servizio in background potete creare un file UNIT. Seguite le seguenti istruzioni:
 
-Create il nuovo file `ScarcellaBOT_CCTV.service` nella cartella `/lib/systemd/system/` (potete usare l'editor nano)
+Create il nuovo file `MyIPCameraBot.service` nella cartella `/lib/systemd/system/` (potete usare l'editor nano)
 Inserite le seguenti righe:
 
 ```
 [Unit]
-Description=ScarcellaBot CCTV Service
+Description=MyIPCameraBot CCTV Service
 After=multi-user.target
 
 [Service]
 Type=idle
-ExecStart=/usr/bin/python /home/pi/Documents/ScarcellaBot/ScarcellaBot_CCTV.py # sostituite con il percorso corretto
+ExecStart=/usr/bin/python /home/pi/Documents/MyIPCameraBot.py # sostituite con il percorso corretto
 
 [Install]
 WantedBy=multi-user.target
@@ -166,22 +167,22 @@ Sostituite il percorso dello script python dell'esempio in alto con il percorso 
 Salvate il file, chiudete l'editor di testo. Assegnate i necessari diritti di esecuzione al file tramite il comando:
 
 ```
-sudo chmod 644 /lib/systemd/system/ScarcellaBOT_CCTV.service
+sudo chmod 644 /lib/systemd/system/ScarcellaBOT.service
 ```
 
 Per far partire il servizio al boot digitate (è sufficiente una sola volta):
 
 ```
 sudo systemctl daemon-reload
-sudo systemctl enable ScarcellaBOT_CCTV.service
+sudo systemctl enable MyIPCameraBot.service
 sudo reboot
 ```
 
 Qualche comando utile per gestire il servizio (si faccia eventualmente riferimento alla documentazione della vostra distro Linux):
 
 
-* check status: `sudo systemctl list-units -t service | grep Scarcella`
-* start `sudo systemctl start ScarcellaBOT_CCTV.service`
-* stop `sudo systemctl stop ScarcellaBOT_CCTV.service`
-* reload config: `sudo systemctl reload ScarcellaBOT_CCTV.service`
+* check status: `sudo systemctl list-units -t service | grep MyIPCameraBot`
+* start `sudo systemctl start MyIPCameraBot.service`
+* stop `sudo systemctl stop MyIPCameraBot.service`
+* reload config: `sudo systemctl reload MyIPCameraBot.service`
 

@@ -1,13 +1,13 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 """
-Devi editare il file di configurazione ScarcellaBot_config.py
-Puoi fare riferimento al file di esempio ScarcellaBot_config.example
+Devi editare il file di configurazione MyIPCameraBot_config.py
+Puoi fare riferimento al file di esempio MyIPCameraBot_config.example
 -
-You must edit the configuration file ScarcellaBot_config.py
-You may refer to the sample files ScarcellaBot_config.example
+You must edit the configuration file MyIPCameraBot_config.py
+You may refer to the sample files MyIPCameraBot_config.example
 """
-import ScarcellaBot_config
+import MyIPCameraBot_config
 import sys
 import time
 import os
@@ -18,7 +18,7 @@ from requests.auth import HTTPBasicAuth
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from datetime import datetime
-from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardHide, ForceReply
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, ForceReply
 
 # ------ GESTORE DEI COMANDI DEL BOT
 class BotCommandsHandler(telepot.Bot):
@@ -31,7 +31,7 @@ class BotCommandsHandler(telepot.Bot):
             print ("Chat message: ", content_type, chat_type, chat_id, msg['text'])
             # verifico se l'utente da cui ho ricevuto il comando è censito
             user_exist = False
-            for u in ScarcellaBot_config.users:
+            for u in MyIPCameraBot_config.users:
                 if u is None:
                     break
                 if u['telegram_id'] == str(chat_id):
@@ -80,7 +80,7 @@ class BotCommandsHandler(telepot.Bot):
 
     def __comm_jpg(self, toUser):
         try:
-            for camera in ScarcellaBot_config.camere:
+            for camera in MyIPCameraBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_send_jpg_to_folder']
                     headers = {'Referer': 'http://' + camera['ip'] + ":" + camera['port']}
@@ -89,7 +89,7 @@ class BotCommandsHandler(telepot.Bot):
                     print(str(datetime.now()), 'HTTP Status: {0}'.format(r.status_code))
                     if r.status_code == 200:
                         time.sleep(6)
-                        last_jpg = max(glob.iglob(ScarcellaBot_config.IMAGES_PATH + '/*.jpg'), key=os.path.getctime)
+                        last_jpg = max(glob.iglob(MyIPCameraBot_config.IMAGES_PATH + '/*.jpg'), key=os.path.getctime)
                         try:
                             last_timestamp = os.path.getatime(last_jpg)
                             bot.sendMessage(toUser, datetime.fromtimestamp(last_timestamp).strftime('%d-%m %H:%M:%S'))
@@ -137,7 +137,7 @@ class BotCommandsHandler(telepot.Bot):
         try:
             hide_keyboard = ReplyKeyboardHide()
             bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
-            for camera in ScarcellaBot_config.camere:
+            for camera in MyIPCameraBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_motion_detection_off']
                     headers = {'Referer': 'http://' + camera['ip'] + ":" + camera['port']}
@@ -152,9 +152,9 @@ class BotCommandsHandler(telepot.Bot):
 
     def __comm_motion_detection_on(self, toUser):
         try:
-            hide_keyboard = ReplyKeyboardHide()
+            hide_keyboard = ReplyKeyboardRemove()
             bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
-            for camera in ScarcellaBot_config.camere:
+            for camera in MyIPCameraBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_motion_detection_on']
                     headers = {'Referer': 'http://' + camera['ip'] + ":" + camera['port']}
@@ -178,9 +178,9 @@ class BotCommandsHandler(telepot.Bot):
 
     def __comm_night_IR_auto(self, toUser):
         try:
-            hide_keyboard = ReplyKeyboardHide()
+            hide_keyboard = ReplyKeyboardRemove()
             bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
-            for camera in ScarcellaBot_config.camere:
+            for camera in MyIPCameraBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_night_mode_auto']
                     headers = {'Referer': 'http://' + camera['ip'] + ":" + camera['port']}
@@ -198,9 +198,9 @@ class BotCommandsHandler(telepot.Bot):
 
     def __comm_night_IR_On(self, toUser):
         try:
-            hide_keyboard = ReplyKeyboardHide()
+            hide_keyboard = ReplyKeyboardRemove()
             bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
-            for camera in ScarcellaBot_config.camere:
+            for camera in MyIPCameraBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_night_mode_on']
                     headers = {'Referer': 'http://' + camera['ip'] + ":" + camera['port']}
@@ -218,9 +218,9 @@ class BotCommandsHandler(telepot.Bot):
 
     def __comm_night_IR_Off(self, toUser):
         try:
-            hide_keyboard = ReplyKeyboardHide()
+            hide_keyboard = ReplyKeyboardRemove()
             bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
-            for camera in ScarcellaBot_config.camere:
+            for camera in MyIPCameraBot_config.camere:
                 try:
                     url_complete = 'http://' + camera['ip'] + ":" + camera['port'] + camera['url_night_mode_off']
                     headers = {'Referer': 'http://' + camera['ip'] + ":" + camera['port']}
@@ -243,7 +243,7 @@ class BotCommandsHandler(telepot.Bot):
             print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
 
     def __getUser(self, userID):
-        for usr in ScarcellaBot_config.users:
+        for usr in MyIPCameraBot_config.users:
             if usr['telegram_id'] == str(userID):
                 return usr
         return None
@@ -258,10 +258,10 @@ class WatchdogHandler(FileSystemEventHandler):
             print("The file is not a .jpg")
             return None  # no image .jpg
         # ciclo tra gli utenti in configurazione
-        for u in ScarcellaBot_config.users:
+        for u in MyIPCameraBot_config.users:
             # verifico che gli utenti abbiano le notifiche PUSH abilitate e che sia già
             # trascorso il tempo minimo tra due invii successivi
-            if u['push'] is True and (datetime.now()-lastMessage).seconds > ScarcellaBot_config.SEND_SECONDS:
+            if u['push'] is True and (datetime.now()-lastMessage).seconds > MyIPCameraBot_config.SEND_SECONDS:
                 try:
                     f = open(event.src_path, 'rb')
                     print(str(datetime.now()), 'Sending the message to ', u)
@@ -274,7 +274,7 @@ class WatchdogHandler(FileSystemEventHandler):
             else:
                 print(str(datetime.now()), "Message not sent. The user may be configured without sending push. "
                       "They must spend at least {0} seconds"
-                      "after the last transmission ({1})".format(ScarcellaBot_config.SEND_SECONDS, lastMessage))
+                      "after the last transmission ({1})".format(MyIPCameraBot_config.SEND_SECONDS, lastMessage))
 
 if __name__ == "__main__":
     # memorizzo il datetime dell'avvio dell'applicazione.
@@ -289,7 +289,7 @@ if __name__ == "__main__":
     # inizializzo il BOT usando il TOKEN segreto dal file di configurazione
     # ed utilizzando la classe gestore
     try:
-        bot = BotCommandsHandler(ScarcellaBot_config.TELEGRAM_BOT_TOKEN)
+        bot = BotCommandsHandler(MyIPCameraBot_config.TELEGRAM_BOT_TOKEN)
         print("Bot:", bot.getMe())
     except:
         print "Impossibile inizializzare il BOT: ", sys.exc_info()[0]
@@ -302,7 +302,7 @@ if __name__ == "__main__":
                       '/motion: imposto il motion detection\n' \
                       "/night: imposto la modalita' nottuna (infrarosso)\n" \
                       '/status: ti dico come sto\n'
-        for u in ScarcellaBot_config.users:
+        for u in MyIPCameraBot_config.users:
             if u is None:
                 break
             print('Welcome...', u)
@@ -318,7 +318,7 @@ if __name__ == "__main__":
     try:
         # leggo il path su cui abilitare il watchDog dal file di configurazione,
         # altrimenti imposto di default il percorso in cui risiede lo script python
-        watchDogPath = ScarcellaBot_config.IMAGES_PATH if ScarcellaBot_config.IMAGES_PATH > 1 else '.'
+        watchDogPath = MyIPCameraBot_config.IMAGES_PATH if MyIPCameraBot_config.IMAGES_PATH > 1 else '.'
         # associo la classe che gestisce la logica del watchDog, gli passo il percorso
         # sul fil system locale e spengo la recursione delle cartelle
         observer = Observer()
