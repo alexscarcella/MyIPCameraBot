@@ -20,6 +20,7 @@ from watchdog.events import FileSystemEventHandler
 from datetime import datetime
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, ForceReply
 
+
 # ------ GESTORE DEI COMANDI DEL BOT
 class BotCommandsHandler(telepot.Bot):
     # definisco il gestore che deve essere invocato nel loop del bot
@@ -135,7 +136,7 @@ class BotCommandsHandler(telepot.Bot):
 
     def __comm_motion_detection_off(self, toUser):
         try:
-            hide_keyboard = ReplyKeyboardHide()
+            hide_keyboard = ReplyKeyboardRemove()
             bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
             for camera in MyIPCameraBot_config.camere:
                 try:
