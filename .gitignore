@@ -101,6 +101,6 @@ ENV/
 .idea/workspace.xml
 /ScarcellaBot_camere.py
 /copyToRaspberry.sh
-/ScarcellaBot.service
-/ScarcellaBot_config.py
+/MyIPCameraBot.service
+/MyIPCameraBot_config.py
 /.gitignore
