@@ -6,7 +6,7 @@ In questo modo è possibile farsi spedire le immagini di una camera, magari acqu
 
 Potete scaricare l'ultima release dello script [da qui](https://github.com/alexscarcella/ScarcellaBot_CCTV/releases).
 
-![un esempio di architettura per l'utilizzo dello script](https://github.com/alexscarcella/ScarcellaBot_CCTV/blob/master/resources/ScarcellaBot_CCTV.png?raw=true "un esempio di architettura per l'utilizzo dello script" {width=40px height=400px})
+![un esempio di architettura per l'utilizzo dello script](https://github.com/alexscarcella/MyIPCameraBot/blob/master/resources/MyIPCameraBot.png?raw=true "un esempio di architettura per l'utilizzo dello script" {width=40px height=400px})
 
 In questo modo è possibile farsi spedire le immagini di una camera, magari acquisita a valle di un movimento o di un rumore, direttamente su una chat dedicata su Telegram.
 
