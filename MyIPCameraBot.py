@@ -14,6 +14,7 @@ import os
 import glob
 import telepot
 import requests
+import socket
 from requests.auth import HTTPBasicAuth
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -112,15 +113,16 @@ class BotCommandsHandler(telepot.Bot):
 
     def __comm_status(self, toUser):
         try:
+            hostname=socket.gethostname()
             user = self.__getUser(toUser)
             if user['push'] is True:
                 notifiche="ACCESE"
             else:
                 notifiche= "SPENTE"
             statusMinutes = ((datetime.now()-startTime).total_seconds()) / 60 / 60
-            bot.sendMessage(toUser, "Ciao {2}. Tutto ok.\n"
-                                    "Sono in allerta da {0:0,.1f} ore!\n"
-                                    "Le tue notifiche push sono {1}!".format(statusMinutes, notifiche, user['name']))
+            bot.sendMessage(toUser, "Ciao {0}. Giro su {1} ed è tutto ok.\n"
+                                    "Sono in allerta da {2:0,.1f} ore!\n"
+                                    "Le tue notifiche push sono {3}!".format(user['name'], hostname, statusMinutes, notifiche))
             print('Message sent!')
         except:
             print "Unable to send status message: ", sys.exc_info()[0]
