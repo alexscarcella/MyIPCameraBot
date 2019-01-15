@@ -260,13 +260,16 @@ class WatchdogHandler(FileSystemEventHandler):
         if os.path.splitext(event.src_path)[1] != ".jpg":
             print("The file is not a .jpg")
             return None  # no image .jpg
+        if (datetime.now() - lastMessage).seconds < MyIPCameraBot_config.SEND_SECONDS:
+            print(str(datetime.now()), "Too many transmissions. ")
+            return None  # no image .jpg
         # ciclo tra gli utenti in configurazione
         for u in MyIPCameraBot_config.users:
             if u is None:
                 continue
             # verifico che gli utenti abbiano le notifiche PUSH abilitate e che sia già
             # trascorso il tempo minimo tra due invii successivi
-            if u['push'] is True and (datetime.now()-lastMessage).seconds > MyIPCameraBot_config.SEND_SECONDS:
+            if u['push'] is True:  # and (datetime.now()-lastMessage).seconds > MyIPCameraBot_config.SEND_SECONDS:
                 try:
                     f = open(event.src_path, 'rb')
                     print(str(datetime.now()), 'Sending the message to ', u)
