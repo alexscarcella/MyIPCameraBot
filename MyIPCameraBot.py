@@ -57,9 +57,9 @@ class BotCommandsHandler(telepot.Bot):
             elif msg['text'] == '/motion':
                 self.__comm_motion(chat_id)
             elif msg['text'] == 'Motion Detection OFF':
-                self.__comm_motion_detection_off(chat_id)
+                self.__comm_motion_detection_off(chat_id, msg["from"]["first_name"])
             elif msg['text'] == 'Motion Detection ON':
-                self.__comm_motion_detection_on(chat_id)
+                self.__comm_motion_detection_on(chat_id, msg["from"]["first_name"])
             elif msg['text'] == '/night':
                 self.__comm_night(chat_id)
             elif msg['text'] == 'IR Automatico':
@@ -136,7 +136,7 @@ class BotCommandsHandler(telepot.Bot):
         except:
             print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
 
-    def __comm_motion_detection_off(self, toUser):
+    def __comm_motion_detection_off(self, toUser, first_name):
         try:
             hide_keyboard = ReplyKeyboardRemove()
             bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
@@ -147,13 +147,18 @@ class BotCommandsHandler(telepot.Bot):
                     print camera['id'] + ' --> ' + url_complete
                     r = requests.get(url_complete, headers=headers, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
                     # if r.status_code == 200:
-                    bot.sendMessage(toUser, 'Camera: {0} -- Motion detection OFF'.format(camera['id']))
+                    for u in MyIPCameraBot_config.users:
+                        if u is None:
+                            continue
+                        if u['push'] is True:
+                            bot.sendMessage(u['telegram_id'], 'Camera: {0} - Motion detection OFF ' 
+                                                              'by {1}'.format(camera['id'], first_name))
                 except:
                     print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
         except:
             print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
 
-    def __comm_motion_detection_on(self, toUser):
+    def __comm_motion_detection_on(self, toUser, first_name):
         try:
             hide_keyboard = ReplyKeyboardRemove()
             bot.sendMessage(toUser, 'Un attimo...', reply_markup=hide_keyboard)
@@ -164,7 +169,12 @@ class BotCommandsHandler(telepot.Bot):
                     print camera['id'] + ' --> ' + url_complete
                     r = requests.get(url_complete, headers=headers, auth=HTTPBasicAuth(camera['user'], camera['pwd']))
                     # if r.status_code == 200:
-                    bot.sendMessage(toUser, 'Camera: {0} -- Motion detection ON'.format(camera['id']))
+                    for u in MyIPCameraBot_config.users:
+                        if u is None:
+                            continue
+                        if u['push'] is True:
+                            bot.sendMessage(u['telegram_id'], 'Camera: {0} - Motion detection ON ' 
+                                                              'by {1}'.format(camera['id'], first_name))
                 except:
                     print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
         except:
