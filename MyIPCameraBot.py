@@ -180,8 +180,8 @@ class BotCommandsHandler(telepot.Bot):
                             if u is None:
                                 continue
                             if u['push'] is True:
-                                bot.sendMessage(u['telegram_id'], 'Camera: {0} - Motion detection OFF ' 
-                                                                  'by {1}'.format(camera['id'], first_name))
+                                bot.sendMessage(u['telegram_id'], 'Camera: {0} - Motion detection: {1}' 
+                                                                  'by {2}'.format(camera['id'], enabled, first_name))
                                 my_logger.info("MOTION OFF sent to user " + str(toUser))
                     else:
                         bot.sendMessage(toUser, 'oops! Unable to contact camera ' + camera['id'])
