@@ -180,3 +180,4 @@ Qualche comando utile per gestire il servizio (si faccia eventualmente riferimen
 * stop `sudo systemctl stop MyIPCameraBot.service`
 * reload config: `sudo systemctl reload MyIPCameraBot.service`
 
+
