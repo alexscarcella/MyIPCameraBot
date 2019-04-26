@@ -232,7 +232,7 @@ class BotCommandsHandler(telepot.Bot):
         return None
 
 
-def __create_logger():
+def create_logger():
     try:
         # create logger
         global my_logger
@@ -298,9 +298,11 @@ class WatchdogHandler(FileSystemEventHandler):
                       "They must spend at least {0} seconds"
                       "after the last transmission ({1})".format(MyIPCameraBot_config.SEND_SECONDS, lastMessage))
 
+
 if __name__ == "__main__":
 
-    __create_logger()
+    create_logger()
+
     startTime = datetime.now()
     my_logger.info("--------------------------------------")
     my_logger.info("START @: " + str(startTime))
