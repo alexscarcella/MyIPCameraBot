@@ -78,6 +78,12 @@ class BotCommandsHandler(telepot.Bot):
                     self.__comm_night_IR(chat_id, 2)
                 elif msg['text'] == 'IR Off':
                     self.__comm_night_IR(chat_id, 3)
+                elif msg['text'] == '/rep':
+                    self.__comm_rep(chat_id)
+                elif msg['text'] == 'Clear repository':
+                    self.__comm_rep_clear(chat_id)
+                elif msg['text'] == 'Cancel':
+                    self.__comm_rep_cancel(chat_id)
                 else:
                     self.__comm_nonCapisco(chat_id)
             else:
@@ -219,7 +225,45 @@ class BotCommandsHandler(telepot.Bot):
                 except:
                     print(str(datetime.now()), 'Command failed! ', sys.exc_info()[0], toUser)
         except:
-            my_logger.exception("Command failed! " + str(sys.exc_info()[0]))
+            my_logger.exception("Command __comm_night_IR failed!")
+
+    def __comm_rep(self, toUser):
+        try:
+            cpt = sum([len(files) for r, d, files in os.walk(MyIPCameraBot_config.IMAGES_PATH)])
+
+            show_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='Clear repository'),
+                                                           KeyboardButton(text='Cancel')],
+                                                          ])
+            my_logger.debug("Reply keyboard showed.")
+            bot.sendMessage(toUser, "Repository folder contains {0} JPG.".format(cpt), reply_markup=show_keyboard)
+            my_logger.info("REP message sent to user " + str(toUser))
+        except:
+            my_logger.exception("Command __comm_rep failed!")
+
+    def __comm_rep_clear(self, toUser):
+        try:
+            hide_keyboard = ReplyKeyboardRemove()
+            my_logger.debug("Keyboard hided")
+            bot.sendMessage(toUser, 'wait...', reply_markup=hide_keyboard)
+            file_list_to_remove = glob.glob(MyIPCameraBot_config.IMAGES_PATH + "/*.jpg")
+            for filePath in file_list_to_remove:
+                try:
+                    os.remove(filePath)
+                except OSError:
+                    print("Error while deleting file")
+            bot.sendMessage(toUser, "Repository cleared!")
+            my_logger.info("REP CLEAR message sent to user " + str(toUser))
+        except:
+            my_logger.exception("Command __comm_rep_clear failed!")
+
+    def __comm_rep_cancel(self, toUser):
+        try:
+            hide_keyboard = ReplyKeyboardRemove()
+            my_logger.debug("Keyboard hided")
+            bot.sendMessage(toUser, 'cancel...', reply_markup=hide_keyboard)
+            my_logger.info("REP CANCEL message sent to user " + str(toUser))
+        except:
+            my_logger.exception("Command __comm_rep_clear failed!")
 
     def __comm_nonCapisco(self, toUser):
         try:
@@ -339,9 +383,10 @@ if __name__ == "__main__":
                       '/help: commands list\n' \
                       '/jpg: I send you all JPG camera snapshot\n' \
                       '/motion: set motion detection\n' \
-                      "/night: set night mode (infrared)\n" \
-                      '/status: my status\n\n' \
-                      '  more info at www.ccworld.it\n'
+                      '/night: set night mode (infrared)\n' \
+                      '/status: my status\n' \
+                      '/rep: manage JPEG repository\n\n' \
+                      'more info at www.ccworld.it\n'
         for u in MyIPCameraBot_config.users:
             if u is None:
                 break
