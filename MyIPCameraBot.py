@@ -122,12 +122,13 @@ class BotCommandsHandler(telepot.Bot):
                 r = self.__call_camera(camera, camera['url_jpg'])
                 if r.status_code == 200:
                     try:
-                        my_logger.info("JPG data avaible")
+                        my_logger.debug("JPG data available")
                         f = io.BytesIO(r.content)
                         img = Image.open(f)
                         now = datetime.now()
                         jpg_filename = MyIPCameraBot_config.IMAGES_PATH + '/{0}{1}.jpg'.format(camera['id'], now.strftime("%Y%m%d%H%M%S"))
                         img.save(jpg_filename, 'JPEG')
+                        my_logger.info("Create JPEG: " + jpg_filename)
                     except:
                         my_logger.exception("Unable to create image file.")
                     finally:
@@ -269,7 +270,7 @@ def create_logger():
 
 def send_bot_image(toUser, filename):
     try:
-        my_logger.info("New file: " + filename)
+        my_logger.info("New ondemand JPG: " + filename)
         f = open(filename, 'rb')
         bot.sendPhoto(toUser, f)
         my_logger.debug('Image message sent to ' + str(toUser))
@@ -285,7 +286,7 @@ def send_bot_image(toUser, filename):
 class WatchdogHandler(FileSystemEventHandler):
 
     def on_created(self, event):
-        my_logger.debug("Auto discover new file: " + event.src_path)
+        my_logger.debug("Auto discover new JPG: " + event.src_path)
 
         # controllo che i nuovi files siano immagini con estensione .jpg
         if os.path.splitext(event.src_path)[1] != ".jpg":
