@@ -11,11 +11,16 @@ TELEGRAM_BOT_TOKEN = "fffffffffffffffffffffffffffffffffff"
 # path completo della cartella contenente le immagini (un esempio:)
 IMAGES_PATH = "/Volumes/images/cctv"
 
-# l'intervallo di tempo minimo (in secondi) che deve trascorrere da un messagio ed il successivo
+# l'intervallo di tempo minimo (in secondi) che deve trascorrere da un messaggio ed il successivo
+# the minimum time interval (in seconds) that must pass from one message and the next
 SEND_SECONDS = 5
 
 # tempo necessario all'invio delle immagini di tutte le camere prima del time-out
+# time required to send images of all cameras before the time-out
 SEND_ONDEMAND_TIMOUT = 8
+
+# log file path (5 files in rotation)
+LOG_FILENAME = '/Volumes/dati/alessandroscarcella/Dropbox/Documenti DropBox/Developer/PythonGIT/MyIPCameraBot/MyIPCameraBot.log'
 
 # -----------------------------------------------------------------------------
 # ------------------- CHAT USERS ----------------------------------------------

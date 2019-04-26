@@ -180,7 +180,7 @@ class BotCommandsHandler(telepot.Bot):
                             if u is None:
                                 continue
                             if u['push'] is True:
-                                bot.sendMessage(u['telegram_id'], 'Camera: {0} - Motion detection: {1}' 
+                                bot.sendMessage(u['telegram_id'], 'Camera: {0} - Motion detection:{1} ' 
                                                                   'by {2}'.format(camera['id'], enabled, first_name))
                                 my_logger.info("MOTION OFF sent to user " + str(toUser))
                     else:
@@ -195,7 +195,7 @@ class BotCommandsHandler(telepot.Bot):
             show_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='IR Automatic')],
                                                           [KeyboardButton(text='IR On'), KeyboardButton(text='IR Off')],
                                                           ])
-            bot.sendMessage(toUser, "Scegli la modalita' notturna:", reply_markup=show_keyboard)
+            bot.sendMessage(toUser, "Select a night mode:", reply_markup=show_keyboard)
             my_logger.info("NIGHT message sent to user " + str(toUser))
         except:
             my_logger.exception("Command failed! " + str(sys.exc_info()[0]))
@@ -232,6 +232,39 @@ class BotCommandsHandler(telepot.Bot):
         return None
 
 
+def __create_logger():
+    try:
+        # create logger
+        global my_logger
+        my_logger = logging.getLogger('MyLogger')
+        my_logger.setLevel(logging.DEBUG)
+
+        # create rotating file handler and set level
+        fl = logging.handlers.RotatingFileHandler(
+            MyIPCameraBot_config.LOG_FILENAME, maxBytes=500000, backupCount=5)
+        fl.setLevel(logging.INFO)
+
+        # create console handler and set level to debug
+        cns = logging.StreamHandler(sys.stdout)
+        cns.setLevel(logging.DEBUG)
+
+        # create formatter
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+        # add formatters
+        fl.setFormatter(formatter)
+        cns.setFormatter(formatter)
+
+        # add ch to logger
+        my_logger.addHandler(fl)
+        my_logger.addHandler(cns)
+
+        my_logger.debug("Rotating File logger created")
+    except:
+        print str(sys.exc_info()[0])
+        my_logger.exception("Unable to create logger")
+
+
 # ------ GESTORE DEL WATCHDOG
 class WatchdogHandler(FileSystemEventHandler):
     def on_created(self, event):
@@ -265,25 +298,9 @@ class WatchdogHandler(FileSystemEventHandler):
                       "They must spend at least {0} seconds"
                       "after the last transmission ({1})".format(MyIPCameraBot_config.SEND_SECONDS, lastMessage))
 
-
 if __name__ == "__main__":
-    LOG_FILENAME = 'MyIPCameraBot.log'
 
-    # Set up a specific logger with our desired output level
-    my_logger = logging.getLogger('MyLogger')
-    my_logger.setLevel(logging.DEBUG)
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-
-    # Add the log message handler to the logger
-    handler = logging.handlers.RotatingFileHandler(
-        LOG_FILENAME, maxBytes=500000, backupCount=5)
-    handler.setFormatter(formatter)
-
-    my_logger.addHandler(handler)
-
-    # memorizzo il datetime dell'avvio dell'applicazione.
-    # lo uso per dare il messaggio di status, che contiene
-    # le ore di attività del server
+    __create_logger()
     startTime = datetime.now()
     my_logger.info("--------------------------------------")
     my_logger.info("START @: " + str(startTime))
