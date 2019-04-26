@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.7
 # -*- coding: utf-8 -*-
 """
 Devi editare il file di configurazione MyIPCameraBot_config.py
@@ -263,7 +263,7 @@ def create_logger():
 
         my_logger.debug("Rotating File logger created")
     except:
-        print str(sys.exc_info())
+        print(str(sys.exc_info()))
         my_logger.exception("Unable to create logger")
 
 
