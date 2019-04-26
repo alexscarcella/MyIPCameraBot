@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Devi editare il file di configurazione MyIPCameraBot_config.py
@@ -28,7 +28,7 @@ from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboar
 from base64 import b64encode
 
 # pip install Pillow
-global lastMessage
+
 
 # ------ GESTORE DEI COMANDI DEL BOT
 class BotCommandsHandler(telepot.Bot):
@@ -183,8 +183,8 @@ class BotCommandsHandler(telepot.Bot):
                                 continue
                             if u['push'] is True:
                                 bot.sendMessage(u['telegram_id'], 'Camera: {0} - Motion detection:{1} ' 
-                                                                  'by {2}'.format(camera['id'], enabled, first_name))
-                                my_logger.info("MOTION OFF sent to user " + str(toUser))
+                                                                  'by {2}'.format(camera['id'], enabled, u['name']))
+                                my_logger.info("MOTION command sent to user " + u['name'])
                     else:
                         bot.sendMessage(toUser, 'oops! Unable to contact camera ' + camera['id'])
                 except:
@@ -282,6 +282,7 @@ def send_bot_image(toUser, filename):
 
 # ------ GESTORE DEL WATCHDOG
 class WatchdogHandler(FileSystemEventHandler):
+
     def on_created(self, event):
         my_logger.debug("Auto discover new file: " + event.src_path)
 
@@ -299,15 +300,15 @@ class WatchdogHandler(FileSystemEventHandler):
             # verifico che gli utenti abbiano le notifiche PUSH abilitate e che sia già
             # trascorso il tempo minimo tra due invii successivi
             if u['push'] is True:  # and (datetime.now()-lastMessage).seconds > MyIPCameraBot_config.SEND_SECONDS:
-                send_bot_image(u['telegram_id'], f)
+                send_bot_image(u['telegram_id'], event.src_path)
             else:
                 my_logger.info("Message not sent. The user may be configured without sending push. "
                       "They must spend at least {0} seconds"
                       "after the last transmission ({1})".format(MyIPCameraBot_config.SEND_SECONDS, lastMessage))
 
-
 if __name__ == "__main__":
 
+    global lastMessage
     create_logger()
 
     startTime = datetime.now()
@@ -355,7 +356,8 @@ if __name__ == "__main__":
     try:
         # leggo il path su cui abilitare il watchDog dal file di configurazione,
         # altrimenti imposto di default il percorso in cui risiede lo script python
-        watchDogPath = MyIPCameraBot_config.IMAGES_PATH if MyIPCameraBot_config.IMAGES_PATH > 1 else '.'
+        # watchDogPath = MyIPCameraBot_config.IMAGES_PATH if MyIPCameraBot_config.IMAGES_PATH > 1 else '.'
+        watchDogPath = MyIPCameraBot_config.IMAGES_PATH
         # associo la classe che gestisce la logica del watchDog, gli passo il percorso
         # sul fil system locale e spengo la recursione delle cartelle
         observer = Observer()
@@ -364,7 +366,7 @@ if __name__ == "__main__":
         observer.start()
         my_logger.debug("Watchdog started")
     except:
-        my_logger.exception("Watchdog error: " + str(sys.exc_info()[0]))
+        my_logger.exception("Watchdog error")
     # tengo in vita il processo fino a che
     # qualcuno non lo interrompe da tastiera
     try:

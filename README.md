@@ -169,7 +169,7 @@ Sostituite il percorso dello script python dell'esempio in alto con il percorso 
 Salvate il file, chiudete l'editor di testo. Assegnate i necessari diritti di esecuzione al file tramite il comando:
 
 ```
-sudo chmod 644 /lib/systemd/system/ScarcellaBOT.service
+sudo chmod 644 /lib/systemd/system/MyIPCameraBot.service
 ```
 
 Per far partire il servizio al boot digitate (è sufficiente una sola volta):
