@@ -274,6 +274,7 @@ def send_bot_image(toUser, filename):
         bot.sendPhoto(toUser, f)
         my_logger.debug('Image message sent to ' + str(toUser))
         lastMessage = datetime.now()  # aggiorno il dateTime di ultima notifica
+        my_logger.debug("Last message dateTime set @: " + str(lastMessage))
     except:
         my_logger.exception("Unable to send image message to user")
     finally:
@@ -291,7 +292,7 @@ class WatchdogHandler(FileSystemEventHandler):
             my_logger.debug("The new file is not a .jpg")
             return None  # no image .jpg
         if (datetime.now() - lastMessage).seconds < MyIPCameraBot_config.SEND_SECONDS:
-            my_logger.info("Too many transmissions. ")
+            my_logger.info("Too many transmissions. Passed only {0}/{1} seconds.".format((datetime.now() - lastMessage).seconds, MyIPCameraBot_config.SEND_SECONDS))
             return None  # no image .jpg
         # ciclo tra gli utenti in configurazione
         for u in MyIPCameraBot_config.users:
@@ -308,7 +309,6 @@ class WatchdogHandler(FileSystemEventHandler):
 
 if __name__ == "__main__":
 
-    global lastMessage
     create_logger()
 
     startTime = datetime.now()
@@ -318,6 +318,7 @@ if __name__ == "__main__":
     # datetime dell'ultimo messaggio inviato:
     # E' possibile infatti impostare che tra un messaggio ed il successivo
     # debbano trascorrere almeno un TOT di secondi
+    global lastMessage
     lastMessage = datetime.now()
     my_logger.debug("Last message dateTime set @: " + str(lastMessage))
 
