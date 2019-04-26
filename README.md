@@ -29,6 +29,7 @@ Per far funzionare correttamente lo script del [bot](https://core.telegram.org/b
 - [telepot](https://github.com/nickoala/telepot): Python framework for Telegram Bot API - v10.2
 - [watchdog](https://pypi.python.org/pypi/watchdog): Filesystem events monitoring. Python API and shell utilities to monitor file system events - v0.8.3
 - [requests](http://requests.readthedocs.io/en/master/): Non-GMO HTTP library for Python, safe for human consumption - v2.12.3
+- [Pillow](https://pillow.readthedocs.io/en/stable/): Pillow is the friendly PIL fork by Alex Clark and Contributors. PIL is the Python Imaging Library by Fredrik Lundh and Contributors.
 
 Potete installare i moduli usando [pip](https://pypi.python.org/pypi/pip).
 
@@ -37,6 +38,8 @@ Potete installare i moduli usando [pip](https://pypi.python.org/pypi/pip).
 `$ sudo pip install telepot`
 
 `$ sudo pip install requests`
+
+`$ sudo pip install Pillow`
 
 Se volete aggiornare i  moduli esistenti, usate il comando `sudo pip install <module> --upgrade`. Verificate comunque la compatibilità delle versioni. Per maggiori informazioni visitate il blog [CCWorld.it](http://www.ccworld.it/).
 
@@ -108,7 +111,7 @@ camera01['ip'] = '127.0.0.2'
 camera01['port'] = '80'
 camera01['user'] = 'user'
 camera01['pwd'] = 'pwd'
-camera01['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+camera01['url_jpg'] = '/image/jpeg.cgi'
 camera01['url_motion_detection'] = '/motion.cgi?MotionDetectionEnable={0}&ConfigReboot=no'
 camera01['url_night_mode'] = '/daynight.cgi?DayNightMode={0}&ConfigReboot=0'
 
@@ -120,7 +123,7 @@ camera02['ip'] = '127.0.0.3'
 camera02['port'] = '80'
 camera02['user'] = 'user'
 camera02['pwd'] = 'pwd'
-camera02['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+camera02['url_jpg'] = '/image/jpeg.cgi'
 camera02['url_motion_detection'] = '/motion.cgi?MotionDetectionEnable={0}&ConfigReboot=no'
 camera02['url_night_mode'] = '/daynight.cgi?DayNightMode={0}&ConfigReboot=0'
 

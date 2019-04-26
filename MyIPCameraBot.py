@@ -17,6 +17,9 @@ import requests
 import socket
 import logging
 import logging.handlers
+import io
+from datetime import datetime
+from PIL import Image
 from requests.auth import HTTPBasicAuth
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -24,6 +27,8 @@ from datetime import datetime
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, ForceReply
 from base64 import b64encode
 
+# pip install Pillow
+global lastMessage
 
 # ------ GESTORE DEI COMANDI DEL BOT
 class BotCommandsHandler(telepot.Bot):
@@ -114,28 +119,25 @@ class BotCommandsHandler(telepot.Bot):
     def __comm_jpg(self, toUser):
         try:
             for camera in MyIPCameraBot_config.camere:
-                try:
-                    r = self.__call_camera(camera, camera['url_send_jpg_to_folder'])
-                    if r.status_code == 200:
-                        time.sleep(6)
-                        last_jpg = max(glob.iglob(MyIPCameraBot_config.IMAGES_PATH + '/*.jpg'), key=os.path.getctime)
-                        my_logger.debug(str(last_jpg))
-                        try:
-                            last_timestamp = os.path.getatime(last_jpg)
-                            bot.sendMessage(toUser, datetime.fromtimestamp(last_timestamp).strftime('%d-%m %H:%M:%S'))
-                            f = open(last_jpg, 'rb')
-                            my_logger.info("JPG sent to user " + str(toUser))
-                            bot.sendPhoto(toUser, f)
-                        except:
-                            my_logger.exception(str(datetime.now()), "Unable to send message %s to %s" % (sys.exc_info()[0], u['name']))
-                        finally:
-                            f.close()
-                    else:
-                        bot.sendMessage(toUser, 'oops! Unable to contact camera ' + camera['id'])
-                except:
-                    my_logger.exception("Unable to get image: " + str(sys.exc_info()[0]))
+                r = self.__call_camera(camera, camera['url_jpg'])
+                if r.status_code == 200:
+                    try:
+                        my_logger.info("JPG data avaible")
+                        f = io.BytesIO(r.content)
+                        img = Image.open(f)
+                        now = datetime.now()
+                        jpg_filename = MyIPCameraBot_config.IMAGES_PATH + '/{0}{1}.jpg'.format(camera['id'], now.strftime("%Y%m%d%H%M%S"))
+                        img.save(jpg_filename, 'JPEG')
+                    except:
+                        my_logger.exception("Unable to create image file.")
+                    finally:
+                        f.close()
+                        img.close()
+                    send_bot_image(toUser, jpg_filename)
+                else:
+                    bot.sendMessage(toUser, 'oops! Unable to contact camera ' + camera['id'])
         except:
-            my_logger.exception("Cameras configuration error: " + str(sys.exc_info()[0]))
+            my_logger.exception("Unable to get image: " + str(sys.exc_info()))
         finally:
             time.sleep(3)
 
@@ -261,21 +263,34 @@ def create_logger():
 
         my_logger.debug("Rotating File logger created")
     except:
-        print str(sys.exc_info()[0])
+        print str(sys.exc_info())
         my_logger.exception("Unable to create logger")
+
+
+def send_bot_image(toUser, filename):
+    try:
+        my_logger.info("New file: " + filename)
+        f = open(filename, 'rb')
+        bot.sendPhoto(toUser, f)
+        my_logger.debug('Image message sent to ' + str(toUser))
+        lastMessage = datetime.now()  # aggiorno il dateTime di ultima notifica
+    except:
+        my_logger.exception("Unable to send image message to user")
+    finally:
+        f.close()
 
 
 # ------ GESTORE DEL WATCHDOG
 class WatchdogHandler(FileSystemEventHandler):
     def on_created(self, event):
-        print "New file: " + event.src_path
-        global lastMessage
+        my_logger.debug("Auto discover new file: " + event.src_path)
+
         # controllo che i nuovi files siano immagini con estensione .jpg
         if os.path.splitext(event.src_path)[1] != ".jpg":
-            print("The file is not a .jpg")
+            my_logger.debug("The new file is not a .jpg")
             return None  # no image .jpg
         if (datetime.now() - lastMessage).seconds < MyIPCameraBot_config.SEND_SECONDS:
-            print(str(datetime.now()), "Too many transmissions. ")
+            my_logger.info("Too many transmissions. ")
             return None  # no image .jpg
         # ciclo tra gli utenti in configurazione
         for u in MyIPCameraBot_config.users:
@@ -284,17 +299,9 @@ class WatchdogHandler(FileSystemEventHandler):
             # verifico che gli utenti abbiano le notifiche PUSH abilitate e che sia già
             # trascorso il tempo minimo tra due invii successivi
             if u['push'] is True:  # and (datetime.now()-lastMessage).seconds > MyIPCameraBot_config.SEND_SECONDS:
-                try:
-                    f = open(event.src_path, 'rb')
-                    print(str(datetime.now()), 'Sending the message to ', u)
-                    bot.sendPhoto(u['telegram_id'], f)
-                    lastMessage = datetime.now() # aggiorno il dateTime di ultima notifica
-                except:
-                    print str(datetime.now()), "Unable to send message %s to %s" % (sys.exc_info()[0], u['name'])
-                finally:
-                    f.close()
+                send_bot_image(u['telegram_id'], f)
             else:
-                print(str(datetime.now()), "Message not sent. The user may be configured without sending push. "
+                my_logger.info("Message not sent. The user may be configured without sending push. "
                       "They must spend at least {0} seconds"
                       "after the last transmission ({1})".format(MyIPCameraBot_config.SEND_SECONDS, lastMessage))
 

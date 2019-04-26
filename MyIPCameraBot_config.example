@@ -1,4 +1,4 @@
-# fil#!/usr/bin/env python2.7
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 # -----------------------------------------------------------------------------
@@ -20,7 +20,7 @@ SEND_SECONDS = 5
 SEND_ONDEMAND_TIMOUT = 8
 
 # log file path (5 files in rotation)
-LOG_FILENAME = '/Volumes/dati/alessandroscarcella/Dropbox/Documenti DropBox/Developer/PythonGIT/MyIPCameraBot/MyIPCameraBot.log'
+LOG_FILENAME = '/home/pi/FTP'
 
 # -----------------------------------------------------------------------------
 # ------------------- CHAT USERS ----------------------------------------------
@@ -52,7 +52,7 @@ camera01['ip'] = '127.0.0.2'
 camera01['port'] = '80'
 camera01['user'] = 'user'
 camera01['pwd'] = 'pwd'
-camera01['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+camera01['url_jpg'] = '/image/jpeg.cgi'
 camera01['url_motion_detection'] = '/motion.cgi?MotionDetectionEnable={0}&ConfigReboot=no'
 camera01['url_night_mode'] = '/daynight.cgi?DayNightMode={0}&ConfigReboot=0'
 
@@ -64,7 +64,7 @@ camera02['ip'] = '127.0.0.3'
 camera02['port'] = '80'
 camera02['user'] = 'user'
 camera02['pwd'] = 'pwd'
-camera02['url_send_jpg_to_folder'] = '/setTestFTP?ReplySuccessPage=replyu.htm&FTPServerTest=+Test+'
+camera02['url_jpg'] = '/image/jpeg.cgi'
 camera02['url_motion_detection'] = '/motion.cgi?MotionDetectionEnable={0}&ConfigReboot=no'
 camera02['url_night_mode'] = '/daynight.cgi?DayNightMode={0}&ConfigReboot=0'
 
